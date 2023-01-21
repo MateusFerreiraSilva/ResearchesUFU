@@ -3,9 +3,39 @@
   "ProjectMap": {
     "6b396e09-d82d-4da0-ad1a-b875842bd2de": {
       "ProjectGuid": "6b396e09-d82d-4da0-ad1a-b875842bd2de",
-      "DisplayName": "ResearchesUFU",
+      "DisplayName": "ResearchesUFU.Data",
       "ColorIndex": 0
+    },
+    "2f3d3d91-73f0-4e95-a92f-056537ea78bd": {
+      "ProjectGuid": "2f3d3d91-73f0-4e95-a92f-056537ea78bd",
+      "DisplayName": "WebApplication",
+      "ColorIndex": 1
+    },
+    "30c1aa48-6e3a-4e81-8d9e-fc3d75463e5f": {
+      "ProjectGuid": "30c1aa48-6e3a-4e81-8d9e-fc3d75463e5f",
+      "DisplayName": "ResearchesUFU.WebSevice",
+      "ColorIndex": 2
+    },
+    "86fde293-d4c3-41c1-9e45-125145a61795": {
+      "ProjectGuid": "86fde293-d4c3-41c1-9e45-125145a61795",
+      "DisplayName": "ResearchesUFU.WebService",
+      "ColorIndex": 3
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Arquivos Diversos",
+      "ColorIndex": -1
+    },
+    "18006d38-0b26-4e99-92db-0d4b6da0f2ff": {
+      "ProjectGuid": "18006d38-0b26-4e99-92db-0d4b6da0f2ff",
+      "DisplayName": "ResearchesUFU.API",
+      "ColorIndex": 4
+    },
+    "87a022b1-7804-4083-bc88-01773a28a3f5": {
+      "ProjectGuid": "87a022b1-7804-4083-bc88-01773a28a3f5",
+      "DisplayName": "ResearchesUFU.API",
+      "ColorIndex": 5
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 6
 }
