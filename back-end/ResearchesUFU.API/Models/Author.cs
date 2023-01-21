@@ -1,10 +1,8 @@
 ﻿namespace ResearchesUFU.API.Models
 {
-    public class Author
+    public class Author : User
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
+        public List<Research> Works { get; set; }
 
     }
 }

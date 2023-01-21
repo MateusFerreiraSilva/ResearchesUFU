@@ -9,6 +9,8 @@ namespace ResearchesUFU.API.Context
         {
         }
 
+        public DbSet<User> Users { get; set; }
+
         public DbSet<Research> Researches { get; set; }
 
         public DbSet<Author> Authors { get; set; }

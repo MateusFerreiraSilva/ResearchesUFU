@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using ResearchesUFU.API;
 using ResearchesUFU.API.Context;
+using ResearchesUFU.API.Services;
+using ResearchesUFU.API.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +16,13 @@ builder.Services.AddSwaggerGen();
 // Add Db
 builder.Services.AddDbContext<ResearchesUFUContext>(options =>
     {
-        var connectionString = builder.Configuration.GetConnectionString("ResearchesUFU");
+        var connectionString = builder.Configuration.GetConnectionString(Constants.DATEBASE_NAME);
         options.UseNpgsql(connectionString);
     }
 );
+
+// Adding Services
+builder.Services.AddScoped<IResearchService, ResearchService>();
 
 var app = builder.Build();
 
@@ -32,9 +38,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-//var connectionString = app.Configuration.GetSection("ConnectionStrings:").ToString();
-//builder.Services.AddDbContext<ResearchesUFUContext>(options => options.UseNpgsql(connectionString));
-
 
 app.Run();
