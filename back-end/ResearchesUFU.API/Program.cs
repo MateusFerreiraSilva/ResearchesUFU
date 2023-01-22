@@ -1,18 +1,32 @@
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using ResearchesUFU.API;
 using ResearchesUFU.API.Context;
 using ResearchesUFU.API.Services;
 using ResearchesUFU.API.Services.Interfaces;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers()
+    .AddOData(options =>
+        options
+            .Select()
+            .Filter()
+            .OrderBy()
+            .SetMaxTop(Constants.MAX_TOP)
+            .Count()
+);
 
-
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
 
 // Add Db
 builder.Services.AddDbContext<ResearchesUFUContext>(options =>
