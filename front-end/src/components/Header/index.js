@@ -1,12 +1,22 @@
 import React from 'react';
 
+import Search from './components/search';
+import { Container, Wrapper } from './styles';
+
 const Header = () => {
   return (
-    <header>
-      <div>
-        Header
-      </div>
-    </header>
+    <Container>
+      <Wrapper>
+        <div>
+        </div>
+
+        <Search />
+
+        <div>
+        </div>
+      </Wrapper>
+
+    </Container>
   )
 }
 
