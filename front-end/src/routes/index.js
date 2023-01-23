@@ -11,11 +11,11 @@ import AuthorBio from '~/pages/AuthorBio';
 const Routes = () => {
   return (
     <Switch>
-      <Route exact path="/" component={SignIn} />
-      <Route path="/register" component={SignUp} />
-      <Route path="/home" component={Home} />
-      <Route path="/research" component={Research} />
-      <Route path="/author-bio" component={AuthorBio} />
+      <Route exact path="/" name="default" component={Home} />
+      <Route path="/register" name="signup" component={SignUp} />
+      <Route path="/login" name="signin" component={SignIn} />
+      <Route path="/research" name="research" component={Research} />
+      <Route path="/author-bio" name="author-bio" component={AuthorBio} />
     </Switch>
   );
 }
