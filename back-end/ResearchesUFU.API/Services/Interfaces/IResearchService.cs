@@ -5,11 +5,14 @@ namespace ResearchesUFU.API.Services.Interfaces
 {
     public interface IResearchService
     {
-        public HttpResponseBase<Research> Get(int id);
+        public Task<HttpResponseBase<Research>> GetAsync(int id);
         
-        public HttpResponseBase<IQueryable<Research>> GetAll();
+        public Task<HttpResponseBase<IQueryable<Research>>> GetAllAsync();
 
-        public HttpResponseBase<IdResponse> Post(Research research);
+        public Task<HttpResponseBase<IdResponse>> PostAsync(Research research);
 
+        public Task<HttpResponseBase<Research>> PutAsync(int id, Research research);
+
+        public Task<HttpResponseBase<Research>> DeleteAsync(int id);
     }
 }

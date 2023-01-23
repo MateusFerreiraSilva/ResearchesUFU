@@ -25,9 +25,28 @@
             }
         }
 
+        public static HttpResponseBase<T> GenerateHttpSuccessResponse()
+        {
+            return new HttpResponseBase<T>(StatusCodes.Status200OK);
+        }
+
         public static HttpResponseBase<T> GenerateHttpErrorResponse()
         {
-            return new HttpResponseBase<T>();
+            return new HttpResponseBase<T>(StatusCodes.Status500InternalServerError);
+        }
+
+        public static bool CheckIfIsValidHttpResponse(HttpResponseBase<T>? httpResponse)
+        {
+            if (
+                httpResponse != null &&
+                httpResponse.Content != null &&
+                httpResponse.HttpStatusCode.Equals(StatusCodes.Status200OK)
+            )
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

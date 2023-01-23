@@ -4,6 +4,7 @@ using ResearchesUFU.API;
 using ResearchesUFU.API.Context;
 using ResearchesUFU.API.Services;
 using ResearchesUFU.API.Services.Interfaces;
+using ResearchesUFU.API.Utils;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,9 +24,13 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    // adding xml comments
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath);
+
+    // Add support for OData-like REST endpoint with [EnableQuery]
+    options.OperationFilter<ODataOperationFilter>();
 });
 
 // Add Db
