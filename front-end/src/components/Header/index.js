@@ -1,0 +1,36 @@
+import React from 'react';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+
+import {
+  Container,
+  Wrapper,
+  InputWrapper,
+  Input,
+  SearchContainer,
+  LoginBtn,
+} from './styles';
+import { MdHome, MdSearch, MdFilterList } from 'react-icons/md';
+
+const Header = () => {
+  return (
+    <Container>
+      <Wrapper>
+        <Link to="/">
+          <MdHome size={25} color="#ffff" />
+        </Link>
+        <SearchContainer>
+          <InputWrapper>
+            <Input type="text" placeholder="Buscar pesquisa..." />
+            <MdSearch size={20} color="#ffff" />
+          </InputWrapper>
+          <MdFilterList size={25} color="#ffff" />
+        </SearchContainer>
+        <Link>
+          <LoginBtn to="/login">Login</LoginBtn>
+        </Link>
+      </Wrapper>
+    </Container>
+  );
+};
+
+export default Header;
