@@ -8,20 +8,20 @@ namespace ResearchesUFU.API.Services
 {
     public class ResearchService : IResearchService
     {
-        private readonly ResearchesUFUContext _context;
-        private readonly DbSet<Research> _researches;
+        private readonly ResearchesUFUContext _dbContext;
+        private readonly DbSet<Research> _researchesRepository;
 
-        public ResearchService(ResearchesUFUContext context)
+        public ResearchService(ResearchesUFUContext dbContext)
         {
-            _context = context;
-            _researches = _context.Researches;
+            _dbContext = dbContext;
+            _researchesRepository = _dbContext.Researches;
         }
 
-        public HttpResponseBase<Research> Get(int id)
+        public async Task<HttpResponseBase<Research>> GetAsync(int id)
         {
             try
             {
-                var queryResult = _researches.FirstOrDefault(r => r.Id.Equals(id));
+                var queryResult = await _researchesRepository.FindAsync(id);
 
                 var response = HttpUtils<Research>.GenerateHttpResponse(queryResult);
 
@@ -33,12 +33,13 @@ namespace ResearchesUFU.API.Services
             }
         }
 
-        public HttpResponseBase<IQueryable<Research>> GetAll()
+        public async Task<HttpResponseBase<IQueryable<Research>>> GetAllAsync()
         {
             try
             {
-                var queryResult = _researches.AsQueryable();
-                var response = HttpUtils<IQueryable<Research>>.GenerateHttpResponse(queryResult);
+                var result = await _researchesRepository.ToListAsync();
+                var queryableResult = result.AsQueryable();
+                var response = HttpUtils<IQueryable<Research>>.GenerateHttpResponse(queryableResult);
 
                 return response;
             }
@@ -48,24 +49,71 @@ namespace ResearchesUFU.API.Services
             }
         }
 
-        // TO DO olhar lance do StoreGeneratedPattern para pegar o id
-        public HttpResponseBase<IdResponse> Post(Research research)
+        public async Task<HttpResponseBase<IdResponse>> PostAsync(Research research)
         {
-            var response = new IdResponse();
             try
             {
-                _researches.Add(research);
-                _context.SaveChanges();
+                var idReponse = new IdResponse();
 
-                _researches.Entry(research).GetDatabaseValues(); // refresh
+                _researchesRepository.Add(research);
+                await _dbContext.SaveChangesAsync();
 
-                response.Id = research.Id;
+                idReponse.Id = research.Id;
 
-                return HttpUtils<IdResponse>.GenerateHttpResponse(response);
+                return HttpUtils<IdResponse>.GenerateHttpResponse(idReponse);
             }
             catch (Exception ex)
             {
                 return HttpUtils<IdResponse>.GenerateHttpErrorResponse();
+            }
+        }
+
+        public async Task<HttpResponseBase<Research>> PutAsync(int id, Research research)
+        {
+            try
+            {
+                var getResponse = await GetAsync(id);
+
+                if (HttpUtils<Research>.CheckIfIsValidHttpResponse(getResponse) == false)
+                {
+                        return HttpUtils<Research>.GenerateHttpResponse(null);
+                }
+
+                _dbContext.Entry(getResponse.Content).State = EntityState.Detached;
+                
+                research.Id = id;
+
+                _researchesRepository.Update(research);
+                await _dbContext.SaveChangesAsync();
+
+                return HttpUtils<Research>.GenerateHttpSuccessResponse();
+            }
+            catch (Exception ex)
+            {
+                return HttpUtils<Research>.GenerateHttpErrorResponse();
+            }
+        }
+
+        public async Task<HttpResponseBase<Research>> DeleteAsync(int id)
+        {
+            try
+            {
+                var getResponse = await GetAsync(id);
+
+                if (HttpUtils<Research>.CheckIfIsValidHttpResponse(getResponse) == false)
+                {
+                    return HttpUtils<Research>.GenerateHttpResponse(null);
+                }
+
+                var research = getResponse.Content;
+                _researchesRepository.Remove(research);
+                await _dbContext.SaveChangesAsync();
+
+                return HttpUtils<Research>.GenerateHttpSuccessResponse();
+            }
+            catch (Exception ex)
+            {
+                return HttpUtils<Research>.GenerateHttpErrorResponse();
             }
         }
     }

@@ -21,12 +21,14 @@ namespace ResearchesUFU.API.Controllers
         /// Get a research by id.
         /// </summary>
         /// <returns><see cref="Research">Research</see></returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Research))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Get([Required] int id)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Get([Required] int id)
         {
-            var response = _researchService.Get(id);
+            var response = await _researchService.GetAsync(id);
             
             return response.HttpStatusCode switch
             {
@@ -45,9 +47,11 @@ namespace ResearchesUFU.API.Controllers
         [EnableQuery]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Research>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Get()
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Get()
         {
-            var response = _researchService.GetAll();
+            var response = await _researchService.GetAllAsync();
 
             return response.HttpStatusCode switch
             {
@@ -65,9 +69,10 @@ namespace ResearchesUFU.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IdResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post([FromBody] Research research)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Post([FromBody, Required] Research research)
         {
-            var response = _researchService.Post(research);
+            var response = await _researchService.PostAsync(research);
 
             return response.HttpStatusCode switch
             {
@@ -76,5 +81,51 @@ namespace ResearchesUFU.API.Controllers
                 _ => BadRequest(),
             };
         }
+
+        /// <summary>
+        /// Update a research of wiht the given id.
+        /// </summary>
+        /// <returns><see cref="Research">Research after the update</see></returns>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Put([Required] int id, [FromBody, Required] Research research)
+        {
+            var response = await _researchService.PutAsync(id, research);
+
+            return response.HttpStatusCode switch
+            {
+                StatusCodes.Status200OK => Ok(),
+                StatusCodes.Status404NotFound => NotFound(),
+                StatusCodes.Status500InternalServerError => StatusCode(response.HttpStatusCode),
+                _ => BadRequest(),
+            };
+        }
+
+        /// <summary>
+        /// Update a research of wiht the given id.
+        /// </summary>
+        /// <returns><see cref="Research">Research after the update</see></returns>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete([Required] int id)
+        {
+            var response = await _researchService.DeleteAsync(id);
+
+            return response.HttpStatusCode switch
+            {
+                StatusCodes.Status200OK => Ok(),
+                StatusCodes.Status404NotFound => NotFound(),
+                StatusCodes.Status500InternalServerError => StatusCode(response.HttpStatusCode),
+                _ => BadRequest(),
+            };
+        }
+
+
     }
 }

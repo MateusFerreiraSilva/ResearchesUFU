@@ -6,15 +6,15 @@
 
         public T? Content { get; set; }
 
-        public HttpResponseBase(T content)
+        public HttpResponseBase(T? content)
         {
             Content = content;
             HttpStatusCode = StatusCodes.Status400BadRequest;
         }
 
-        public HttpResponseBase()
+        public HttpResponseBase(int httpStatusCode)
         {
-            HttpStatusCode = StatusCodes.Status500InternalServerError;
+            HttpStatusCode = httpStatusCode;
         }
     }
 }
