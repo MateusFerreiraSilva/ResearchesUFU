@@ -41,8 +41,11 @@ builder.Services.AddDbContext<ResearchesUFUContext>(options =>
     }
 );
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // Adding Services
 builder.Services.AddScoped<IResearchService, ResearchService>();
+builder.Services.AddScoped<IFieldService, FieldService>();
 
 var app = builder.Build();
 

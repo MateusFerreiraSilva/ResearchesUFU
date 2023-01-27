@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ResearchesUFU.API.Models
+﻿namespace ResearchesUFU.API.Models.DTO.Responses
 {
-    public class Research
+    public class ResearchResponseDTO
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public string Title { get; set; } = string.Empty;
@@ -17,7 +14,7 @@ namespace ResearchesUFU.API.Models
 
         public string Thumbnail { get; set; } = string.Empty;
 
-        public List<ResearchField> ResearchField { get; set; } = null!;
+        public List<FieldResponseDTO> Fields { get; set; } = null!;
 
         //public List<Tag> Tags { get; set; } = new List<Tag>();
 
@@ -25,6 +22,6 @@ namespace ResearchesUFU.API.Models
 
         //public ResearchStructure Structure { get; set; } = null!;
 
-        public string LastUpdated { get; set; } = DateTime.UtcNow.ToString();
+        public string LastUpdated { get; set; } = string.Empty;
     }
 }

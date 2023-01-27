@@ -5,14 +5,28 @@ namespace ResearchesUFU.API.Context
 {
     public class ResearchesUFUContext : DbContext
     {
+        //public DbSet<User> Users => Set<User>();
+
+        public DbSet<Research> Researches => Set<Research>();
+
+        public DbSet<Field> Fields => Set<Field>();
+
+        public DbSet<ResearchField> ResearchField => Set<ResearchField>();
+
         public ResearchesUFUContext(DbContextOptions<ResearchesUFUContext> options) : base(options)
         {
         }
 
-        public DbSet<User> Users => Set<User>();
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
 
-        public DbSet<Research> Researches => Set<Research>();
+            ManyToManyRelationshipConfiguration(modelBuilder);
+        }
 
-        public DbSet<Author> Authors => Set<Author>();
+        private void ManyToManyRelationshipConfiguration(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ResearchField>()
+                .HasKey(rf => new { rf.ResearchId, rf.FieldId });
+        }
     }
 }
