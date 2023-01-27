@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
+import { MdHome, MdSearch, MdFilterList } from 'react-icons/md';
 import {
   Container,
   Wrapper,
@@ -9,7 +10,6 @@ import {
   SearchContainer,
   LoginBtn,
 } from './styles';
-import { MdHome, MdSearch, MdFilterList } from 'react-icons/md';
 
 const Header = () => {
   return (
@@ -25,8 +25,8 @@ const Header = () => {
           </InputWrapper>
           <MdFilterList size={25} color="#ffff" />
         </SearchContainer>
-        <Link>
-          <LoginBtn to="/login">Login</LoginBtn>
+        <Link to="/login">
+          <LoginBtn>Login</LoginBtn>
         </Link>
       </Wrapper>
     </Container>

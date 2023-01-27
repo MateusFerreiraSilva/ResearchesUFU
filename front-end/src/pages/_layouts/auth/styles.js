@@ -1,58 +1,65 @@
 import styled from 'styled-components';
-import { darken } from 'polished';
+import { darken, lighten } from 'polished';
 
 export const Wrapper = styled.div`
   height: 100%;
-  background: linear-gradient(-90deg, #7159c1, #ab59c1);
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 export const Content = styled.div`
-  width: 100%;
-  max-width: 315px;
+  width: 40%;
+  background-color: #45188e;
+  border-radius: 8px;
   text-align: center;
+
   form {
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
+    margin-top: 60px;
+    label {
+      color: #ffff;
+    }
     input {
-      background: rgba(0, 0, 0, 0.1);
-      border: 0;
-      border-radius: 4px;
+      width: 80%;
+      border: 1px solid ${darken(0.3, '#ffff')};
+      background: transparent;
+      border-radius: 20px;
       height: 44px;
       padding: 0 15px;
       color: #fff;
-      margin: 0 0 10px;
+      margin: 0 5px 20px;
       &::placeholder {
         color: rgba(255, 255, 255, 0.7);
       }
     }
     span {
+      display: block;
       color: #fb5f91;
+      margin-bottom: 20px;
       align-self: flex-start;
-      margin: 0 0 10px;
+      font-size: 12px;
       font-weight: bold;
     }
     button {
-      margin: 5px 0 0;
+      width: 120px;
+      margin: 0 auto;
       height: 44px;
-      background: #3b9eff;
-      font-weight: bold;
+      background: none;
       color: #fff;
-      border: 0;
-      border-radius: 4px;
+      border: 1px solid ${darken(0.3, '#ffff')};
+      border-radius: 20px;
       font-size: 16px;
       transition: background 0.2s;
       &:hover {
-        background: ${darken(0.03, '#3b9eff')};
+        background: ${lighten(0.06, '#45188e')};
       }
     }
     a {
-      color: #fff;
-      margin-top: 15px;
-      font-size: 16px;
+      color: #ffff;
+      margin-top: 8px;
+      font-size: 12px;
       opacity: 0.8;
       &:hover {
         opacity: 1;

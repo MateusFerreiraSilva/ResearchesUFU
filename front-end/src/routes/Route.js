@@ -7,21 +7,17 @@ import DefaultLayout from '~/pages/_layouts/default';
 
 import { store } from '~/store';
 
-const authPages = ["signin", "signup"];
-
-const RouteWrapper = ({
-  component: Component,
-  isPrivate,
-  name,
-  ...rest
-}) =>  {
+const RouteWrapper = ({ component: Component, type, ...rest }) => {
   const { signed } = store.getState().auth;
 
-  if (!signed & isPrivate) {
-    return <Redirect to="/" />;
+  if (!signed && type === 'private') {
+    return <Redirect to="/login" />;
   }
 
-  const Layout = (!isPrivate || signed) && !authPages.some(p => p === name) ? DefaultLayout: AuthLayout;
+  const Layout =
+    type === 'public' || (type === 'private' && signed)
+      ? DefaultLayout
+      : AuthLayout;
 
   return (
     <Route
@@ -33,11 +29,10 @@ const RouteWrapper = ({
       )}
     />
   );
-}
+};
 
 RouteWrapper.propTypes = {
-  isPrivate: PropTypes.bool,
-  name: PropTypes.string,
+  type: PropTypes.oneOf(['private', 'public', 'auth']).isRequired,
   component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
     .isRequired,
 };
