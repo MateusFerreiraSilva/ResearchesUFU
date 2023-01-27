@@ -6,6 +6,8 @@ const Container = styled.header`
   padding: 15px 50px 15px 15px;
   background-color: #45188e;
   font-family: Roboto, sans-serif;
+  position: sticky;
+  top: 0;
 `;
 
 const Wrapper = styled.div`

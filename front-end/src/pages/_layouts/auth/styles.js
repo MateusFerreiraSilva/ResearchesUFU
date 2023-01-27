@@ -13,6 +13,7 @@ export const Content = styled.div`
   background-color: #45188e;
   border-radius: 8px;
   text-align: center;
+
   form {
     display: flex;
     flex-direction: column;

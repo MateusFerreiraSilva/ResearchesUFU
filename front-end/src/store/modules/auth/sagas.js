@@ -7,17 +7,19 @@ import history from '~/services/history';
 import {
   authenticateAsync,
   createUserAsync,
-  setAuthorizationToken
+  setAuthorizationToken,
 } from '~/services/api';
 
 export function* signIn({ payload }) {
   try {
     const { email, password } = payload;
 
-    const response = yield call(authenticateAsync({
-      email,
-      password,
-    }));
+    const response = yield call(
+      authenticateAsync({
+        email,
+        password,
+      })
+    );
 
     const { token, user } = response.data;
 
@@ -34,12 +36,14 @@ export function* signUp({ payload }) {
   try {
     const { name, email, password } = payload;
 
-    yield call()
-    yield call(createUserAsync({
-      name,
-      email,
-      password,
-    }));
+    yield call();
+    yield call(
+      createUserAsync({
+        name,
+        email,
+        password,
+      })
+    );
 
     history.push('/');
   } catch (err) {
