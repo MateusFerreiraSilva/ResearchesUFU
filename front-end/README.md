@@ -5,7 +5,7 @@
 
 ## Executando a aplicação
 
-Basta rodar os comandos abaixo:
+Na pasta do frontend, basta rodar os comandos abaixo:
 ```bash
 $ yarn
 ```
