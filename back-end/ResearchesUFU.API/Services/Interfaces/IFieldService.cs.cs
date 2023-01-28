@@ -1,12 +1,11 @@
 ﻿using ResearchesUFU.API.Models;
-using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services.Interfaces
 {
     public interface IFieldService
     {
-        public Task<HttpResponseBase<Field>> GetAsync(int id);
+        public Task<Field> FindOneAsync(int id);
 
-        public Task<HttpResponseBase<IQueryable<Field>>> GetAllAsync();
+        public Task<IQueryable<Field>> FindAllAsync();
     }
 }

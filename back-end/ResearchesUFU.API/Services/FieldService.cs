@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using ResearchesUFU.API.Context;
 using ResearchesUFU.API.Models;
 using ResearchesUFU.API.Services.Interfaces;
-using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services
 {
@@ -21,36 +20,16 @@ namespace ResearchesUFU.API.Services
             _fieldRepository = _dbContext.Fields;
         }
 
-        public async Task<HttpResponseBase<Field>> GetAsync(int id)
+        public async Task<Field> FindOneAsync(int id)
         {
-            try
-            {
-                var queryResult = await _fieldRepository.FindAsync(id);
-
-                var response = HttpUtils<Field>.GenerateHttpResponse(queryResult);
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                return HttpUtils<Field>.GenerateHttpErrorResponse();
-            }
+            return await _fieldRepository.FindAsync(id);
         }
 
-        public async Task<HttpResponseBase<IQueryable<Field>>> GetAllAsync()
+        public async Task<IQueryable<Field>> FindAllAsync()
         {
-            try
-            {
-                var result = await _fieldRepository.ToListAsync();
-                var queryableResult = result.AsQueryable();
-                var response = HttpUtils<IQueryable<Field>>.GenerateHttpResponse(queryableResult);
+            var fieldsList = await _fieldRepository.ToListAsync();
 
-                return response;
-            }
-            catch (Exception ex)
-            {
-                return HttpUtils<IQueryable<Field>>.GenerateHttpErrorResponse();
-            }
+            return fieldsList.AsQueryable();
         }
     }
 }
