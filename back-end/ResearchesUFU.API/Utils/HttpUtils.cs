@@ -30,6 +30,16 @@
             return new HttpResponseBase<T>(StatusCodes.Status200OK);
         }
 
+        public static HttpResponseBase<T> GenerateHttpBadRequestResponse(T? content)
+        {
+            if (content == null)
+            {
+                return new HttpResponseBase<T>(StatusCodes.Status400BadRequest);
+            }
+
+            return new HttpResponseBase<T>(content);
+        }
+
         public static HttpResponseBase<T> GenerateHttpErrorResponse()
         {
             return new HttpResponseBase<T>(StatusCodes.Status500InternalServerError);

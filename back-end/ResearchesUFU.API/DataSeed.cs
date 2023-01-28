@@ -9,6 +9,8 @@ namespace ResearchesUFU.API
         {
             SeedResearch(modelBuilder);
             SeedField(modelBuilder);
+            SeedUser(modelBuilder);
+            SeedAuthor(modelBuilder);
             SeedResearchField(modelBuilder);
         }
 
@@ -65,6 +67,56 @@ namespace ResearchesUFU.API
                     Id = 3,
                     Name = "Biologia",
                     Acronym = "BIO"
+                }
+            );
+        }
+
+        private static void SeedUser(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Email = "johndoe@ufu.br",
+                    // sha256 for "1234"
+                    PasswordHash = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+                    AuthorId = 1,
+                },
+                new User
+                {
+                    Id = 2,
+                    Email = "jannedoe@ufu.br",
+                    // sha256 for "batata"
+                    PasswordHash = "f4610aa514477222afac2b77f971d069780ca2846f375849f3dfa3c0047ebbd1",
+                    AuthorId = 2
+                }
+            );
+        }
+
+        private static void SeedAuthor(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Author>().HasData(
+                new Author
+                {
+                    Id = 1,
+                    UserType = Constants.USER_TYPE_PUBLICATOR,
+                    Name = "saul goodman",
+                    Birthdate = "20/07/1990",
+                    PhoneNumber = "553498153388",
+                    ProfilePictureUrl = "https://i.kym-cdn.com/entries/icons/original/000/040/009/3dsaulcover.jpg",
+                    Bio = "blablablablabla",
+                    UserId = 1,
+                },
+                new Author
+                {
+                    Id = 2,
+                    UserType = Constants.USER_TYPE_PUBLICATOR,
+                    Name = "Janne Doe",
+                    Birthdate = "01/05/2001",
+                    PhoneNumber = "553498851389",
+                    ProfilePictureUrl = "https://hiperideal.vteximg.com.br/arquivos/ids/167660/27502.jpg?v=636615816147030000",
+                    Bio = ".........................",
+                    UserId = 2
                 }
             );
         }

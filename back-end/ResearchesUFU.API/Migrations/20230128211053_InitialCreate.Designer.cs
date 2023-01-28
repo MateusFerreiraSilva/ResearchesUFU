@@ -11,7 +11,7 @@ using ResearchesUFU.API.Context;
 namespace ResearchesUFU.API.Migrations
 {
     [DbContext(typeof(ResearchesUFUContext))]
-    [Migration("20230128201053_InitialCreate")]
+    [Migration("20230128211053_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -23,6 +23,85 @@ namespace ResearchesUFU.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ResearchesUFU.API.Models.Author", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Birthdate")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CoverPhotoUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastUpdated")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Authors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Bio = "blablablablabla",
+                            Birthdate = "20/07/1990",
+                            CoverPhotoUrl = "",
+                            LastUpdated = "28/01/2023 21:10:53",
+                            Name = "saul goodman",
+                            PhoneNumber = "553498153388",
+                            ProfilePictureUrl = "https://i.kym-cdn.com/entries/icons/original/000/040/009/3dsaulcover.jpg",
+                            UserId = 1,
+                            UserType = "Publicator"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Bio = ".........................",
+                            Birthdate = "01/05/2001",
+                            CoverPhotoUrl = "",
+                            LastUpdated = "28/01/2023 21:10:53",
+                            Name = "Janne Doe",
+                            PhoneNumber = "553498851389",
+                            ProfilePictureUrl = "https://hiperideal.vteximg.com.br/arquivos/ids/167660/27502.jpg?v=636615816147030000",
+                            UserId = 2,
+                            UserType = "Publicator"
+                        });
+                });
 
             modelBuilder.Entity("ResearchesUFU.API.Models.Field", b =>
                 {
@@ -81,6 +160,10 @@ namespace ResearchesUFU.API.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ResearchStructure")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
@@ -105,8 +188,9 @@ namespace ResearchesUFU.API.Migrations
                         new
                         {
                             Id = 1,
-                            LastUpdated = "28/01/2023 20:10:53",
+                            LastUpdated = "28/01/2023 21:10:53",
                             PublicationDate = "02/02/2022",
+                            ResearchStructure = "",
                             Status = "Em andamento",
                             Summary = "AAAAA",
                             Thumbnail = "https://cdn.vox-cdn.com/thumbor/WR9hE8wvdM4hfHysXitls9_bCZI=/0x0:1192x795/1400x1400/filters:focal(596x398:597x399)/cdn.vox-cdn.com/uploads/chorus_asset/file/22312759/rickroll_4k.jpg",
@@ -115,8 +199,9 @@ namespace ResearchesUFU.API.Migrations
                         new
                         {
                             Id = 2,
-                            LastUpdated = "28/01/2023 20:10:53",
+                            LastUpdated = "28/01/2023 21:10:53",
                             PublicationDate = "19/09/2019",
+                            ResearchStructure = "",
                             Status = "Finalizada",
                             Summary = "BBBB",
                             Thumbnail = "https://cdn.vox-cdn.com/thumbor/WR9hE8wvdM4hfHysXitls9_bCZI=/0x0:1192x795/1400x1400/filters:focal(596x398:597x399)/cdn.vox-cdn.com/uploads/chorus_asset/file/22312759/rickroll_4k.jpg",
@@ -125,8 +210,9 @@ namespace ResearchesUFU.API.Migrations
                         new
                         {
                             Id = 3,
-                            LastUpdated = "28/01/2023 20:10:53",
+                            LastUpdated = "28/01/2023 21:10:53",
                             PublicationDate = "01/01/2011",
+                            ResearchStructure = "",
                             Status = "Cancelada",
                             Summary = "Potato",
                             Thumbnail = "https://static.mundoeducacao.uol.com.br/mundoeducacao/conteudo_legenda/01325ea5fd7fd4ecab7e209393bf6188.jpg",
@@ -171,6 +257,63 @@ namespace ResearchesUFU.API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ResearchesUFU.API.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastUpdated")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthorId = 1,
+                            Email = "johndoe@ufu.br",
+                            LastUpdated = "28/01/2023 21:10:53",
+                            PasswordHash = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AuthorId = 2,
+                            Email = "jannedoe@ufu.br",
+                            LastUpdated = "28/01/2023 21:10:53",
+                            PasswordHash = "f4610aa514477222afac2b77f971d069780ca2846f375849f3dfa3c0047ebbd1"
+                        });
+                });
+
+            modelBuilder.Entity("ResearchesUFU.API.Models.Author", b =>
+                {
+                    b.HasOne("ResearchesUFU.API.Models.User", "User")
+                        .WithOne("Author")
+                        .HasForeignKey("ResearchesUFU.API.Models.Author", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ResearchesUFU.API.Models.ResearchField", b =>
                 {
                     b.HasOne("ResearchesUFU.API.Models.Field", "Field")
@@ -198,6 +341,12 @@ namespace ResearchesUFU.API.Migrations
             modelBuilder.Entity("ResearchesUFU.API.Models.Research", b =>
                 {
                     b.Navigation("ResearchField");
+                });
+
+            modelBuilder.Entity("ResearchesUFU.API.Models.User", b =>
+                {
+                    b.Navigation("Author")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

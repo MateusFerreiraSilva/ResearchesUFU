@@ -46,6 +46,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Adding Services
 builder.Services.AddScoped<IResearchService, ResearchService>();
 builder.Services.AddScoped<IFieldService, FieldService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

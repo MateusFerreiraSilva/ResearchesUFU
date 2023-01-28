@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ResearchesUFU.API.Context;
 using ResearchesUFU.API.Models;
 using ResearchesUFU.API.Services.Interfaces;
@@ -9,13 +8,11 @@ namespace ResearchesUFU.API.Services
     public class FieldService : IFieldService
     {
         private readonly ResearchesUFUContext _dbContext;
-        public readonly IMapper _mapper;
         private readonly DbSet<Field> _fieldRepository;
 
-        public FieldService(ResearchesUFUContext dbContext, IMapper mapper)
+        public FieldService(ResearchesUFUContext dbContext)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
 
             _fieldRepository = _dbContext.Fields;
         }
