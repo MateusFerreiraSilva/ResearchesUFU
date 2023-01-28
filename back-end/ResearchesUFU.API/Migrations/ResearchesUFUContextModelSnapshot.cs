@@ -40,6 +40,26 @@ namespace ResearchesUFU.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Fields");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Acronym = "SI",
+                            Name = "Sistemas de Informação"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Acronym = "CC",
+                            Name = "Ciência da Computação"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Acronym = "BIO",
+                            Name = "Biologia"
+                        });
                 });
 
             modelBuilder.Entity("ResearchesUFU.API.Models.Research", b =>
@@ -77,6 +97,38 @@ namespace ResearchesUFU.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Researches");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            LastUpdated = "28/01/2023 20:10:53",
+                            PublicationDate = "02/02/2022",
+                            Status = "Em andamento",
+                            Summary = "AAAAA",
+                            Thumbnail = "https://cdn.vox-cdn.com/thumbor/WR9hE8wvdM4hfHysXitls9_bCZI=/0x0:1192x795/1400x1400/filters:focal(596x398:597x399)/cdn.vox-cdn.com/uploads/chorus_asset/file/22312759/rickroll_4k.jpg",
+                            Title = "Primeira Pesquisa"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            LastUpdated = "28/01/2023 20:10:53",
+                            PublicationDate = "19/09/2019",
+                            Status = "Finalizada",
+                            Summary = "BBBB",
+                            Thumbnail = "https://cdn.vox-cdn.com/thumbor/WR9hE8wvdM4hfHysXitls9_bCZI=/0x0:1192x795/1400x1400/filters:focal(596x398:597x399)/cdn.vox-cdn.com/uploads/chorus_asset/file/22312759/rickroll_4k.jpg",
+                            Title = "Segunda Pesquisa"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            LastUpdated = "28/01/2023 20:10:53",
+                            PublicationDate = "01/01/2011",
+                            Status = "Cancelada",
+                            Summary = "Potato",
+                            Thumbnail = "https://static.mundoeducacao.uol.com.br/mundoeducacao/conteudo_legenda/01325ea5fd7fd4ecab7e209393bf6188.jpg",
+                            Title = "Batata"
+                        });
                 });
 
             modelBuilder.Entity("ResearchesUFU.API.Models.ResearchField", b =>
@@ -92,6 +144,28 @@ namespace ResearchesUFU.API.Migrations
                     b.HasIndex("FieldId");
 
                     b.ToTable("ResearchField");
+
+                    b.HasData(
+                        new
+                        {
+                            ResearchId = 1,
+                            FieldId = 1
+                        },
+                        new
+                        {
+                            ResearchId = 2,
+                            FieldId = 1
+                        },
+                        new
+                        {
+                            ResearchId = 2,
+                            FieldId = 2
+                        },
+                        new
+                        {
+                            ResearchId = 3,
+                            FieldId = 3
+                        });
                 });
 
             modelBuilder.Entity("ResearchesUFU.API.Models.ResearchField", b =>

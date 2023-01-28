@@ -27,6 +27,8 @@ namespace ResearchesUFU.API.Context
         {
             modelBuilder.Entity<ResearchField>()
                 .HasKey(rf => new { rf.ResearchId, rf.FieldId });
+
+            DataSeed.Seed(modelBuilder);
         }
     }
 }
