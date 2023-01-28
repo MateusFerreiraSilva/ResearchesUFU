@@ -13,9 +13,9 @@ namespace ResearchesUFU.API.Services.Interfaces
 
         public Task<HttpResponseBase<ResearchResponseDTO>> PostAsync(ResearchRequestDTO research);
 
-        //public Task<HttpResponseBase<Research>> PutAsync(int id, Research research);
+        public Task<HttpResponseBase<ResearchResponseDTO>> PutAsync(int id, ResearchRequestDTO research);
 
-        //public Task<HttpResponseBase<Research>> DeleteAsync(int id);
+        public Task<HttpResponseBase<ResearchResponseDTO>> DeleteAsync(int id);
 
         public Task<Research> FindOneAsync(int id);
 

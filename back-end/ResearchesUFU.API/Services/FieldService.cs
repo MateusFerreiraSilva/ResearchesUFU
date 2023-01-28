@@ -19,17 +19,30 @@ namespace ResearchesUFU.API.Services
 
             _fieldRepository = _dbContext.Fields;
         }
-
         public async Task<Field> FindOneAsync(int id)
         {
-            return await _fieldRepository.FindAsync(id);
+            try
+            {
+                return await _fieldRepository.FindAsync(id);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<IQueryable<Field>> FindAllAsync()
         {
-            var fieldsList = await _fieldRepository.ToListAsync();
+            try
+            {
+                var fieldsList = await _fieldRepository.ToListAsync();
 
-            return fieldsList.AsQueryable();
+                return fieldsList.AsQueryable();
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

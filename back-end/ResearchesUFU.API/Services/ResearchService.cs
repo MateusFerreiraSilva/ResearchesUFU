@@ -38,7 +38,7 @@ namespace ResearchesUFU.API.Services
 
                 return response;
             }
-            catch (Exception ex)
+            catch
             {
                 return HttpUtils<ResearchResponseDTO>.GenerateHttpErrorResponse();
             }
@@ -56,7 +56,7 @@ namespace ResearchesUFU.API.Services
 
                 return response;
             }
-            catch (Exception ex)
+            catch
             {
                 return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpErrorResponse();
             }
@@ -67,82 +67,103 @@ namespace ResearchesUFU.API.Services
             try
             {
                 var research = _mapper.Map<Research>(researchRequest);
-                var fields = await GetFieldsAsync(research.Id);
+
+                var fieldsIds = researchRequest.Fields.Select(f => f.Id);
+                var fields = fieldsIds.Select(id => _fieldService.FindOneAsync(id).Result).ToList();
 
                 _researchesRepository.Add(research);
                 SaveAllFields(research, fields);
 
                 await _dbContext.SaveChangesAsync();
+                _dbContext.Entry(research).State = EntityState.Detached;
 
                 var responseDTO = await BuildResearchResponseDTO(research);
 
                 return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(responseDTO);
             }
-            catch (Exception ex)
+            catch
             {
                 return HttpUtils<ResearchResponseDTO>.GenerateHttpErrorResponse();
             }
         }
 
-        //public async Task<HttpResponseBase<Research>> PutAsync(int id, Research research)
-        //{
-        //    try
-        //    {
-        //        var getResponse = await GetAsync(id);
+        public async Task<HttpResponseBase<ResearchResponseDTO>> PutAsync(int id, ResearchRequestDTO researchRequest)
+        {
+            try
+            {
+                var research = await FindOneAsync(id);
 
-        //        if (HttpUtils<Research>.CheckIfIsValidHttpResponse(getResponse) == false)
-        //        {
-        //                return HttpUtils<Research>.GenerateHttpResponse(null);
-        //        }
+                var newFieldsIds = researchRequest.Fields.Select(f => f.Id);
+                var newfields = newFieldsIds.Select(id => _fieldService.FindOneAsync(id).Result).ToList();
+                var oldFields = await GetFieldsAsync(id);
 
-        //        _dbContext.Entry(getResponse.Content).State = EntityState.Detached;
+                _dbContext.Entry(research).State = EntityState.Detached;
 
-        //        research.Id = id;
+                research = _mapper.Map<Research>(researchRequest);
+                research.Id = id;
 
-        //        _researchesRepository.Update(research);
-        //        await _dbContext.SaveChangesAsync();
+                _researchesRepository.Update(research);
 
-        //        return HttpUtils<Research>.GenerateHttpSuccessResponse();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return HttpUtils<Research>.GenerateHttpErrorResponse();
-        //    }
-        //}
+                RemoveAllFields(research, oldFields);
+                SaveAllFields(research, newfields);
 
-        //public async Task<HttpResponseBase<Research>> DeleteAsync(int id)
-        //{
-        //    try
-        //    {
-        //        var getResponse = await GetAsync(id);
+                await _dbContext.SaveChangesAsync();
 
-        //        if (HttpUtils<Research>.CheckIfIsValidHttpResponse(getResponse) == false)
-        //        {
-        //            return HttpUtils<Research>.GenerateHttpResponse(null);
-        //        }
+                var researchDTO = await BuildResearchResponseDTO(research);
 
-        //        var research = getResponse.Content;
-        //        _researchesRepository.Remove(research);
-        //        await _dbContext.SaveChangesAsync();
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(researchDTO);
+            }
+            catch
+            {
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpErrorResponse();
+            }
+        }
 
-        //        return HttpUtils<Research>.GenerateHttpSuccessResponse();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return HttpUtils<Research>.GenerateHttpErrorResponse();
-        //    }
-        //}
+        public async Task<HttpResponseBase<ResearchResponseDTO>> DeleteAsync(int id)
+        {
+            try
+            {
+                var research = await FindOneAsync(id);
+
+                var fields = await GetFieldsAsync(research.Id);
+
+                _researchesRepository.Remove(research);
+                RemoveAllFields(research, fields);
+
+                await _dbContext.SaveChangesAsync();
+
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse();
+            }
+            catch
+            {
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpErrorResponse();
+            }
+        }
 
         public async Task<Research> FindOneAsync(int id)
         {
-            return await _researchesRepository.FindAsync(id);
+            try
+            {
+                return await _researchesRepository.FindAsync(id);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<IQueryable<Research>> FindAllAsync()
         {
-            var researchesList = await _researchesRepository.ToListAsync();
-            
-            return researchesList.AsQueryable();
+            try
+            {
+                var researchesList = await _researchesRepository.ToListAsync();
+
+                return researchesList.AsQueryable();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private async Task<List<Field>> GetFieldsAsync(int id)
@@ -154,71 +175,47 @@ namespace ResearchesUFU.API.Services
             return fields.ToList();
         }
 
-        private void SaveOneField(Research research, Field field)
-        {
-            var researchField = new ResearchField
-            {
-                Research = research,
-                Field = field
-            };
-
-            _researchFieldRepository.Add(researchField);
-        }
-
         private void SaveAllFields(Research research, List<Field> fields)
         {
-            foreach (var f in fields)
-            {
-                SaveOneField(research, f);
-            }
+            var researchFieldList = BuildResearchFieldList(research, fields);
+
+            _researchFieldRepository.AddRange(researchFieldList);
+        }
+
+        private void RemoveAllFields(Research research, List<Field> fields)
+        {
+            var researchFieldList = BuildResearchFieldList(research, fields);
+
+            _researchFieldRepository.RemoveRange(researchFieldList);
+        }
+
+        private List<ResearchField> BuildResearchFieldList(Research research, List<Field> fields)
+        {
+            return fields.Select(f =>
+                new ResearchField
+                {
+                    Research = research,
+                    Field = f
+                }
+            ).ToList();
         }
 
         private async Task<ResearchResponseDTO> BuildResearchResponseDTO(Research research)
         {
-            var fields = await GetFieldsAsync(research.Id);
-            //var tags = await GetTagsAsync(research.Id);
+            if (research != null)
+            {
+                var fields = await GetFieldsAsync(research.Id);
+                //var tags = await GetTagsAsync(research.Id);
 
-            var researchDTO = _mapper.Map<ResearchResponseDTO>(research);
-            var fieldsDTO = _mapper.Map<List<FieldResponseDTO>>(fields);
+                var researchDTO = _mapper.Map<ResearchResponseDTO>(research);
+                var fieldsDTO = _mapper.Map<List<FieldResponseDTO>>(fields);
 
-            researchDTO.Fields = fieldsDTO;
+                researchDTO.Fields = fieldsDTO;
 
-            return researchDTO;
+                return researchDTO;
+            }
+
+            return null;
         }
-
-
-        //private async Task<ResearchResponseDTO> BuildResearchResponseDTO(Research research)
-        //{
-        //    var fieldsTasks = (await _researchFieldRepository.ToListAsync())
-        //            .Where(rf => rf.ResearchId.Equals(research.Id))
-        //            .Select(rf => _fieldService.GetAsync(rf.FieldId));
-        //    var fields = (await Task.WhenAll(fieldsTasks))
-        //        .Select(t => t.Content);
-
-        //    var response = _mapper.Map<ResearchResponseDTO>(research);
-        //    response.Fields = fields.Select(f => _mapper.Map<FieldResponseDTO>(f)).ToList();
-
-        //    return response;
-        //}
-
-        //private async Task<List<ResearchField>> BuildResearchFieldList(Research research, List<FieldRequestDTO> fieldsDTO)
-        //{
-        //    var fieldsTask = fieldsDTO.Select(f => _fieldService.GetAsync(f.Id));
-        //    var fields = (await Task.WhenAll(fieldsTask)).Select(f => f.Content).ToList();
-
-        //    var reasearchFieldList = fields.Select(f =>
-        //        {
-        //            var researcheField = new ResearchField
-        //            {
-        //                Research = research,
-        //                Field = f
-        //            };
-
-        //            return researcheField;
-        //        }
-        //    ).ToList();
-
-        //    return reasearchFieldList;
-        //}
     }
 }
