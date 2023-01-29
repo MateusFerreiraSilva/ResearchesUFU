@@ -9,9 +9,13 @@ namespace ResearchesUFU.API
         {
             SeedResearch(modelBuilder);
             SeedField(modelBuilder);
+            SeedTag(modelBuilder);
             SeedUser(modelBuilder);
             SeedAuthor(modelBuilder);
+            
             SeedResearchField(modelBuilder);
+            SeedResearchTag(modelBuilder);
+            SeedResearchAuthor(modelBuilder);
         }
 
         private static void SeedResearch(ModelBuilder modelBuilder)
@@ -71,6 +75,42 @@ namespace ResearchesUFU.API
             );
         }
 
+        private static void SeedTag(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Tag>().HasData(
+                new Tag
+                {
+                    Id = 1,
+                    Name = "artificial intelligence",
+                },
+                new Tag
+                {
+                    Id = 2,
+                    Name = "ai",
+                },
+                new Tag
+                {
+                    Id = 3,
+                    Name = "cloud computing",
+                },
+                new Tag
+                {
+                    Id = 4,
+                    Name = "computer science",
+                },
+                new Tag
+                {
+                    Id = 5,
+                    Name = "biochemistry",
+                },
+                new Tag
+                {
+                    Id = 6,
+                    Name = "potato",
+                }
+            );
+        }
+
         private static void SeedUser(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(
@@ -100,7 +140,7 @@ namespace ResearchesUFU.API
                 {
                     Id = 1,
                     UserType = Constants.USER_TYPE_PUBLICATOR,
-                    Name = "saul goodman",
+                    Name = "John Doe",
                     Birthdate = "20/07/1990",
                     PhoneNumber = "553498153388",
                     ProfilePictureUrl = "https://i.kym-cdn.com/entries/icons/original/000/040/009/3dsaulcover.jpg",
@@ -143,6 +183,63 @@ namespace ResearchesUFU.API
                 {
                     ResearchId = 3,
                     FieldId = 3,
+                }
+            );
+        }
+
+        private static void SeedResearchTag(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ResearchTag>().HasData(
+                new ResearchTag
+                {
+                    ResearchId = 1,
+                    TagId = 1
+                },
+                new ResearchTag
+                {
+                    ResearchId = 1,
+                    TagId = 2
+                },
+                new ResearchTag
+                {
+                    ResearchId = 1,
+                    TagId = 4
+                },
+                new ResearchTag
+                {
+                    ResearchId = 2,
+                    TagId = 3
+                },
+                new ResearchTag
+                {
+                    ResearchId = 3,
+                    TagId = 5
+                },
+                new ResearchTag
+                {
+                    ResearchId = 3,
+                    TagId = 6
+                }
+            );
+        }
+
+        private static void SeedResearchAuthor(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ResearchAuthor>().HasData(
+                new ResearchAuthor
+                {
+                    ResearchId = 1,
+                    AuthorId = 1,
+                },
+                new ResearchAuthor
+                {
+                    ResearchId = 2,
+                    AuthorId = 1,
+                },
+                new ResearchAuthor
+                {
+                    ResearchId = 3,
+                    AuthorId = 2,
                 }
             );
         }

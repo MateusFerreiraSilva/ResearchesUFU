@@ -12,20 +12,37 @@ namespace ResearchesUFU.API.Services
     public class ResearchService : IResearchService
     {
         private readonly ResearchesUFUContext _dbContext;
-        public readonly IMapper _mapper;
         private readonly DbSet<Research> _researchesRepository;
         private readonly DbSet<ResearchField> _researchFieldRepository;
-        private readonly IFieldService _fieldService;
+        private readonly DbSet<ResearchTag> _researchTagRepository;
+        private readonly DbSet<ResearchAuthor> _researchAuthorRepository;
 
-        public ResearchService(ResearchesUFUContext dbContext, IMapper mapper, IFieldService fieldService)
+        private readonly IFieldService _fieldService;
+        private readonly ITagService _tagService;
+        private readonly IAuthorService _authorService;
+
+        public readonly IMapper _mapper;
+
+        public ResearchService(
+            ResearchesUFUContext dbContext,
+            IFieldService fieldService,
+            ITagService tagService,
+            IAuthorService authorService,
+            IMapper mapper
+        )
         {
             _dbContext = dbContext;
-            _mapper = mapper;
 
             _researchesRepository = _dbContext.Researches;
             _researchFieldRepository = _dbContext.ResearchField;
+            _researchTagRepository = _dbContext.ResearchTag;
+            _researchAuthorRepository = _dbContext.ResearchAuthor;
 
             _fieldService = fieldService;
+            _tagService = tagService;
+            _authorService = authorService;
+
+            _mapper = mapper;
         }
 
         public async Task<HttpResponseBase<ResearchResponseDTO>> GetAsync(int id)
@@ -70,9 +87,17 @@ namespace ResearchesUFU.API.Services
 
                 var fieldsIds = researchRequest.Fields.Select(f => f.Id);
                 var fields = fieldsIds.Select(id => _fieldService.FindOneAsync(id).Result).ToList();
+                
+                var tagsIds = researchRequest.Tags.Select(t => t.Id);
+                var tags = tagsIds.Select(id => _tagService.FindOneAsync(id).Result).ToList();
+
+                var authorsIds = researchRequest.Authors.Select(a => a.Id);
+                var authors = authorsIds.Select(id => _authorService.FindOneAsync(id).Result).ToList();
 
                 _researchesRepository.Add(research);
                 SaveAllFields(research, fields);
+                SaveAllTags(research, tags);
+                SaveAllAuthors(research, authors);
 
                 await _dbContext.SaveChangesAsync();
                 _dbContext.Entry(research).State = EntityState.Detached;
@@ -94,8 +119,16 @@ namespace ResearchesUFU.API.Services
                 var research = await FindOneAsync(id);
 
                 var newFieldsIds = researchRequest.Fields.Select(f => f.Id);
-                var newfields = newFieldsIds.Select(id => _fieldService.FindOneAsync(id).Result).ToList();
+                var newFields = newFieldsIds.Select(id => _fieldService.FindOneAsync(id).Result).ToList();
                 var oldFields = await GetFieldsAsync(id);
+
+                var newTagsIds = researchRequest.Tags.Select(t => t.Id);
+                var newTags = newTagsIds.Select(id => _tagService.FindOneAsync(id).Result).ToList();
+                var oldTags = await GetTagsAsync(id);
+
+                var newAuthorsIds = researchRequest.Authors.Select(a => a.Id);
+                var newAuthors = newAuthorsIds.Select(id => _authorService.FindOneAsync(id).Result).ToList();
+                var oldAuthors = await GetAuthorsAsync(id);
 
                 _dbContext.Entry(research).State = EntityState.Detached;
 
@@ -105,7 +138,14 @@ namespace ResearchesUFU.API.Services
                 _researchesRepository.Update(research);
 
                 RemoveAllFields(research, oldFields);
-                SaveAllFields(research, newfields);
+                SaveAllFields(research, newFields);
+                
+                RemoveAllTags(research, oldTags);
+                SaveAllTags(research, newTags);
+
+                RemoveAllAuthors(research, oldAuthors);
+                SaveAllAuthors(research, newAuthors);
+
 
                 await _dbContext.SaveChangesAsync();
 
@@ -200,17 +240,89 @@ namespace ResearchesUFU.API.Services
             ).ToList();
         }
 
+        private async Task<List<Tag>> GetTagsAsync(int id)
+        {
+            var researchTag= await _researchTagRepository.ToListAsync();
+            var tagsIds = researchTag.Where(rt => rt.ResearchId.Equals(id)).Select(rt => rt.TagId);
+            var tags = tagsIds.Select(id => _tagService.FindOneAsync(id).Result);
+
+            return tags.ToList();
+        }
+
+        private void SaveAllTags(Research research, List<Tag> tags)
+        {
+            var researchTagList = BuildResearchTagList(research, tags);
+
+            _researchTagRepository.AddRange(researchTagList);
+        }
+
+        private void RemoveAllTags(Research research, List<Tag> tags)
+        {
+            var researchTagList = BuildResearchTagList(research, tags);
+
+            _researchTagRepository.RemoveRange(researchTagList);
+        }
+
+        private List<ResearchTag> BuildResearchTagList(Research research, List<Tag> tags)
+        {
+            return tags.Select(t =>
+                new ResearchTag
+                {
+                    Research = research,
+                    Tag = t
+                }
+            ).ToList();
+        }
+        private async Task<List<Author>> GetAuthorsAsync(int id)
+        {
+            var researchAuthor = await _researchAuthorRepository.ToListAsync();
+            var auhtorsIds = researchAuthor.Where(ra => ra.ResearchId.Equals(id)).Select(ra => ra.AuthorId);
+            var authors = auhtorsIds.Select(id => _authorService.FindOneAsync(id).Result);
+
+            return authors.ToList();
+        }
+
+        private void SaveAllAuthors(Research research, List<Author> authors)
+        {
+            var researchAuhtorList = BuildResearchAuthorList(research, authors);
+
+            _researchAuthorRepository.AddRange(researchAuhtorList);
+        }
+
+        private void RemoveAllAuthors(Research research, List<Author> authors)
+        {
+            var researchAuthorList = BuildResearchAuthorList(research, authors);
+
+            _researchAuthorRepository.RemoveRange(researchAuthorList);
+        }
+
+        private List<ResearchAuthor> BuildResearchAuthorList(Research research, List<Author> authors)
+        {
+            return authors.Select(a =>
+                new ResearchAuthor
+                {
+                    Research = research,
+                    Author = a
+                }
+            ).ToList();
+        }
+
         private async Task<ResearchResponseDTO> BuildResearchResponseDTO(Research research)
         {
             if (research != null)
             {
                 var fields = await GetFieldsAsync(research.Id);
-                //var tags = await GetTagsAsync(research.Id);
+                var tags = await GetTagsAsync(research.Id);
+                var authors = await GetAuthorsAsync(research.Id);
 
                 var researchDTO = _mapper.Map<ResearchResponseDTO>(research);
                 var fieldsDTO = _mapper.Map<List<FieldResponseDTO>>(fields);
+                var tagsDTO = _mapper.Map<List<TagResponseDTO>>(tags);
+                var authorsDTO = _mapper.Map<List<AuthorResponseDTO>>(authors);
 
                 researchDTO.Fields = fieldsDTO;
+                researchDTO.Tags = tagsDTO;
+                researchDTO.Authors = authorsDTO;
 
                 return researchDTO;
             }

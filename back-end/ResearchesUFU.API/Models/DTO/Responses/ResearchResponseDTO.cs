@@ -14,13 +14,13 @@
 
         public string Thumbnail { get; set; } = string.Empty;
 
-        public List<FieldResponseDTO> Fields { get; set; } = null!;
+        public string ResearchStructure { get; set; } = string.Empty;
 
-        //public List<Tag> Tags { get; set; } = new List<Tag>();
+        public List<FieldResponseDTO> Fields { get; set; } = new List<FieldResponseDTO>();
 
-        //public List<User> Authors { get; set; } = new List<User>();
+        public List<TagResponseDTO> Tags { get; set; } = new List<TagResponseDTO>();
 
-        //public ResearchStructure Structure { get; set; } = null!;
+        public List<AuthorResponseDTO> Authors { get; set; } = new List<AuthorResponseDTO>();
 
         public string LastUpdated { get; set; } = string.Empty;
     }

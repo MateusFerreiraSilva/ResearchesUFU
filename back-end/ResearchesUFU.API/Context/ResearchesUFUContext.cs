@@ -13,7 +13,14 @@ namespace ResearchesUFU.API.Context
 
         public DbSet<Author> Authors => Set<Author>();
 
+        public DbSet<Tag> Tags => Set<Tag>();
+
         public DbSet<ResearchField> ResearchField => Set<ResearchField>();
+
+        public DbSet<ResearchTag> ResearchTag => Set<ResearchTag>();
+
+        public DbSet<ResearchAuthor> ResearchAuthor => Set<ResearchAuthor>();
+
 
         public ResearchesUFUContext(DbContextOptions<ResearchesUFUContext> options) : base(options)
         {
@@ -40,6 +47,12 @@ namespace ResearchesUFU.API.Context
         {
             modelBuilder.Entity<ResearchField>()
                 .HasKey(rf => new { rf.ResearchId, rf.FieldId });
+
+            modelBuilder.Entity<ResearchAuthor>()
+                .HasKey(ra => new { ra.ResearchId, ra.AuthorId });
+
+            modelBuilder.Entity<ResearchTag>()
+                .HasKey(rt => new { rt.ResearchId, rt.TagId });
         }
     }
 }

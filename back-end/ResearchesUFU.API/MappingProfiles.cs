@@ -13,6 +13,8 @@ namespace ResearchesUFU.API
             CreateMap<FieldRequestDTO, Field>();
             CreateMap<Research, ResearchResponseDTO>();
             CreateMap<Field, FieldResponseDTO>();
+            CreateMap<Tag, TagResponseDTO>();
+            CreateMap<Author, AuthorResponseDTO>();
         }
     }
 }

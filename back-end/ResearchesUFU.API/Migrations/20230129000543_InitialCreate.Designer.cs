@@ -11,7 +11,7 @@ using ResearchesUFU.API.Context;
 namespace ResearchesUFU.API.Migrations
 {
     [DbContext(typeof(ResearchesUFUContext))]
-    [Migration("20230128211053_InitialCreate")]
+    [Migration("20230129000543_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -81,8 +81,8 @@ namespace ResearchesUFU.API.Migrations
                             Bio = "blablablablabla",
                             Birthdate = "20/07/1990",
                             CoverPhotoUrl = "",
-                            LastUpdated = "28/01/2023 21:10:53",
-                            Name = "saul goodman",
+                            LastUpdated = "29/01/2023 00:05:43",
+                            Name = "John Doe",
                             PhoneNumber = "553498153388",
                             ProfilePictureUrl = "https://i.kym-cdn.com/entries/icons/original/000/040/009/3dsaulcover.jpg",
                             UserId = 1,
@@ -94,7 +94,7 @@ namespace ResearchesUFU.API.Migrations
                             Bio = ".........................",
                             Birthdate = "01/05/2001",
                             CoverPhotoUrl = "",
-                            LastUpdated = "28/01/2023 21:10:53",
+                            LastUpdated = "29/01/2023 00:05:43",
                             Name = "Janne Doe",
                             PhoneNumber = "553498851389",
                             ProfilePictureUrl = "https://hiperideal.vteximg.com.br/arquivos/ids/167660/27502.jpg?v=636615816147030000",
@@ -188,7 +188,7 @@ namespace ResearchesUFU.API.Migrations
                         new
                         {
                             Id = 1,
-                            LastUpdated = "28/01/2023 21:10:53",
+                            LastUpdated = "29/01/2023 00:05:43",
                             PublicationDate = "02/02/2022",
                             ResearchStructure = "",
                             Status = "Em andamento",
@@ -199,7 +199,7 @@ namespace ResearchesUFU.API.Migrations
                         new
                         {
                             Id = 2,
-                            LastUpdated = "28/01/2023 21:10:53",
+                            LastUpdated = "29/01/2023 00:05:43",
                             PublicationDate = "19/09/2019",
                             ResearchStructure = "",
                             Status = "Finalizada",
@@ -210,13 +210,45 @@ namespace ResearchesUFU.API.Migrations
                         new
                         {
                             Id = 3,
-                            LastUpdated = "28/01/2023 21:10:53",
+                            LastUpdated = "29/01/2023 00:05:43",
                             PublicationDate = "01/01/2011",
                             ResearchStructure = "",
                             Status = "Cancelada",
                             Summary = "Potato",
                             Thumbnail = "https://static.mundoeducacao.uol.com.br/mundoeducacao/conteudo_legenda/01325ea5fd7fd4ecab7e209393bf6188.jpg",
                             Title = "Batata"
+                        });
+                });
+
+            modelBuilder.Entity("ResearchesUFU.API.Models.ResearchAuthor", b =>
+                {
+                    b.Property<int>("ResearchId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ResearchId", "AuthorId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("ResearchAuthor");
+
+                    b.HasData(
+                        new
+                        {
+                            ResearchId = 1,
+                            AuthorId = 1
+                        },
+                        new
+                        {
+                            ResearchId = 2,
+                            AuthorId = 1
+                        },
+                        new
+                        {
+                            ResearchId = 3,
+                            AuthorId = 2
                         });
                 });
 
@@ -257,6 +289,112 @@ namespace ResearchesUFU.API.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ResearchesUFU.API.Models.ResearchTag", b =>
+                {
+                    b.Property<int>("ResearchId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ResearchId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("ResearchTag");
+
+                    b.HasData(
+                        new
+                        {
+                            ResearchId = 1,
+                            TagId = 1
+                        },
+                        new
+                        {
+                            ResearchId = 1,
+                            TagId = 2
+                        },
+                        new
+                        {
+                            ResearchId = 1,
+                            TagId = 4
+                        },
+                        new
+                        {
+                            ResearchId = 2,
+                            TagId = 3
+                        },
+                        new
+                        {
+                            ResearchId = 3,
+                            TagId = 5
+                        },
+                        new
+                        {
+                            ResearchId = 3,
+                            TagId = 6
+                        });
+                });
+
+            modelBuilder.Entity("ResearchesUFU.API.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("LastUpdated")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            LastUpdated = "29/01/2023 00:05:43",
+                            Name = "artificial intelligence"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            LastUpdated = "29/01/2023 00:05:43",
+                            Name = "ai"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            LastUpdated = "29/01/2023 00:05:43",
+                            Name = "cloud computing"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            LastUpdated = "29/01/2023 00:05:43",
+                            Name = "computer science"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            LastUpdated = "29/01/2023 00:05:43",
+                            Name = "biochemistry"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            LastUpdated = "29/01/2023 00:05:43",
+                            Name = "potato"
+                        });
+                });
+
             modelBuilder.Entity("ResearchesUFU.API.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -290,7 +428,7 @@ namespace ResearchesUFU.API.Migrations
                             Id = 1,
                             AuthorId = 1,
                             Email = "johndoe@ufu.br",
-                            LastUpdated = "28/01/2023 21:10:53",
+                            LastUpdated = "29/01/2023 00:05:43",
                             PasswordHash = "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"
                         },
                         new
@@ -298,7 +436,7 @@ namespace ResearchesUFU.API.Migrations
                             Id = 2,
                             AuthorId = 2,
                             Email = "jannedoe@ufu.br",
-                            LastUpdated = "28/01/2023 21:10:53",
+                            LastUpdated = "29/01/2023 00:05:43",
                             PasswordHash = "f4610aa514477222afac2b77f971d069780ca2846f375849f3dfa3c0047ebbd1"
                         });
                 });
@@ -312,6 +450,25 @@ namespace ResearchesUFU.API.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ResearchesUFU.API.Models.ResearchAuthor", b =>
+                {
+                    b.HasOne("ResearchesUFU.API.Models.Author", "Author")
+                        .WithMany("ResearchAuthor")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchesUFU.API.Models.Research", "Research")
+                        .WithMany("ResearchAuthor")
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Research");
                 });
 
             modelBuilder.Entity("ResearchesUFU.API.Models.ResearchField", b =>
@@ -333,6 +490,30 @@ namespace ResearchesUFU.API.Migrations
                     b.Navigation("Research");
                 });
 
+            modelBuilder.Entity("ResearchesUFU.API.Models.ResearchTag", b =>
+                {
+                    b.HasOne("ResearchesUFU.API.Models.Research", "Research")
+                        .WithMany("ResearchTag")
+                        .HasForeignKey("ResearchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResearchesUFU.API.Models.Tag", "Tag")
+                        .WithMany("ResearchTag")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Research");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("ResearchesUFU.API.Models.Author", b =>
+                {
+                    b.Navigation("ResearchAuthor");
+                });
+
             modelBuilder.Entity("ResearchesUFU.API.Models.Field", b =>
                 {
                     b.Navigation("ResearchField");
@@ -340,7 +521,16 @@ namespace ResearchesUFU.API.Migrations
 
             modelBuilder.Entity("ResearchesUFU.API.Models.Research", b =>
                 {
+                    b.Navigation("ResearchAuthor");
+
                     b.Navigation("ResearchField");
+
+                    b.Navigation("ResearchTag");
+                });
+
+            modelBuilder.Entity("ResearchesUFU.API.Models.Tag", b =>
+                {
+                    b.Navigation("ResearchTag");
                 });
 
             modelBuilder.Entity("ResearchesUFU.API.Models.User", b =>

@@ -13,5 +13,9 @@
         public string Thumbnail { get; set; } = string.Empty;
 
         public List<FieldRequestDTO> Fields { get; set; } = null!;
+
+        public List<TagRequestDTO> Tags { get; set; } = null!;
+
+        public List<AuthorRequestDTO> Authors { get; set; } = null!;
     }
 }

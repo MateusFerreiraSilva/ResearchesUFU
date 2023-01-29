@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ResearchesUFU.API.Models
+﻿namespace ResearchesUFU.API.Models
 {
     public class Research : BaseEntity
     {
@@ -18,8 +16,8 @@ namespace ResearchesUFU.API.Models
 
         public List<ResearchField> ResearchField { get; set; } = null!;
 
-        //public List<Tag> Tags { get; set; } = new List<Tag>();
+        public List<ResearchTag> ResearchTag { get; set; } = null!;
 
-        //public List<User> Authors { get; set; } = new List<User>();
+        public List<ResearchAuthor> ResearchAuthor { get; set; } = null!;
     }
 }

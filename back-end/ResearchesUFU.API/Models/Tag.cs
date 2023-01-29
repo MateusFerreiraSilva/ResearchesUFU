@@ -1,16 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-
-namespace ResearchesUFU.API.Models
+﻿namespace ResearchesUFU.API.Models
 {
-    public class Tag
+    public class Tag : BaseEntity
     {
-        [Key]
-        public string Name { get; set; } = null!;
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        [JsonIgnore]
-        public DateTime LastUpdated { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public List<ResearchTag> ResearchTag { get; set; } = null!;
     }
 }
