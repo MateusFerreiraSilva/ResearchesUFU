@@ -3,6 +3,7 @@
     public static class Constants
     {
         public const string DATEBASE_NAME = "ResearchesUFU";
+        public const string CORS_POLICY_NAME = "AllowAny";
         public const int MAX_TOP = 100;
         public const string USER_TYPE_EDITOR = "Editor";
         public const string USER_TYPE_PUBLICATOR = "Publicator";

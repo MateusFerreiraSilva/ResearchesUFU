@@ -6,6 +6,7 @@ using ResearchesUFU.API.Services;
 using ResearchesUFU.API.Services.Interfaces;
 using ResearchesUFU.API.Utils;
 using System.Reflection;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,17 @@ builder.Services.AddControllers()
             .OrderBy()
             .SetMaxTop(Constants.MAX_TOP)
             .Count()
+);
+
+builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: Constants.CORS_POLICY_NAME,
+            policy =>
+            {
+                policy.WithOrigins("*");
+            }
+        );
+    }
 );
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -64,5 +76,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors(Constants.CORS_POLICY_NAME);
 
 app.Run();

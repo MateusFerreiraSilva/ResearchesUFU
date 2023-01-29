@@ -15,7 +15,7 @@ const ListItem = styled.li`
 
   & span {
     white-space: nowrap;
-    width: 50%;
+    width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;

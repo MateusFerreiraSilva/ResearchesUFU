@@ -10,8 +10,8 @@ const ResearchList = ({ items }) => {
         <ListItem>
           <Content>
             <section>
-              <h1>{i.name}</h1>
-              <p>{i.description}</p>
+              <h1>{i.title}</h1>
+              <p>{i.summary}</p>
               <span>
                 <b>Temas</b>: {i.fields}
               </span>
@@ -20,6 +20,9 @@ const ResearchList = ({ items }) => {
               </span>
               <span>
                 <b>Autores</b>: {i.authors}
+              </span>
+              <span>
+                <b>Status</b>: {i.status}
               </span>
             </section>
             {i.thumbnail && (
