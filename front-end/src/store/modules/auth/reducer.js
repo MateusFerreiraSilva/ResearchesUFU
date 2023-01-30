@@ -6,6 +6,8 @@ const INITIAL_STATE = {
   loading: false,
 };
 
+export let isUserSiggned = false;
+
 export default function auth(state = INITIAL_STATE, action) {
   return produce(state, (draft) => {
     switch (action.type) {
@@ -17,6 +19,7 @@ export default function auth(state = INITIAL_STATE, action) {
         draft.token = action.payload.token;
         draft.signed = true;
         draft.loading = false;
+        isUserSiggned = true; // :eyes:
         break;
       }
       case '@auth/SIGN_IN_FAILURE': {

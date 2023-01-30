@@ -6,7 +6,6 @@ using ResearchesUFU.API.Services;
 using ResearchesUFU.API.Services.Interfaces;
 using ResearchesUFU.API.Utils;
 using System.Reflection;
-using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +25,10 @@ builder.Services.AddCors(options =>
         options.AddPolicy(name: Constants.CORS_POLICY_NAME,
             policy =>
             {
-                policy.WithOrigins("*");
+                policy.WithOrigins("*", "http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             }
         );
     }

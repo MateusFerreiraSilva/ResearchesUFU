@@ -45,9 +45,14 @@ const SignIn = () => {
       <Content>
         <img src={logo} alt="UFU" />
 
-        <Form schema={schema} onSubmit={() => handleSubmit()}>
+        <Form schema={schema} onSubmit={(formContent) => {
+            const email = formContent.email;
+            const password = formContent.password;
+            handleSubmit({email, password}); 
+          }}
+        >
           <label>
-            E-mail
+            E-mail 
             <Input
               id="email"
               name="email"

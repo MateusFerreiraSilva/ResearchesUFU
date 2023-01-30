@@ -11,6 +11,8 @@ import {
   LoginBtn,
 } from './styles';
 
+import { isUserSiggned } from '~/store/modules/auth/reducer';
+
 const Header = () => {
   return (
     <Container>
@@ -25,9 +27,14 @@ const Header = () => {
           </InputWrapper>
           <MdFilterList size={25} color="#ffff" />
         </SearchContainer>
-        <Link to="/login">
-          <LoginBtn>Login</LoginBtn>
-        </Link>
+        {
+          !isUserSiggned ?
+          <Link to="/login">
+            <LoginBtn>Login</LoginBtn>
+          </Link>
+        :
+          null
+        }
       </Wrapper>
     </Container>
   );

@@ -15,7 +15,7 @@ const getResearchesAsync = async () => {
   return results.data.map(r => formatResearch(r));
 };
 
-const authenticateAsync = async (payload) => await api.post('/Auth', payload);
+const authenticateAsync = async (payload) => await api.post('/api/Session', payload);
 
 const createUserAsync = async (payload) => await api.post('/User', payload);
 
