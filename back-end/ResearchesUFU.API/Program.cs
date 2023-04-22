@@ -67,11 +67,8 @@ builder.Services.AddScoped<IAuthorService, AuthorService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
@@ -81,4 +78,30 @@ app.MapControllers();
 
 app.UseCors(Constants.CORS_POLICY_NAME);
 
+ApplyMigrations(app);
+
 app.Run();
+
+// applying migrations
+
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//
+//     var context = services.GetRequiredService<ResearchesUFUContext>();
+//     if (context.Database.GetPendingMigrations().Any())
+//     {
+//         context.Database.Migrate();
+//     }
+// }
+
+void ApplyMigrations(WebApplication webApplication)
+{
+    var scope = webApplication.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ResearchesUFUContext>();
+    
+    if (context.Database.GetPendingMigrations().Any()) {
+        context.Database.Migrate();
+    }
+}
