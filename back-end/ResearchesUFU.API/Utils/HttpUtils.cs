@@ -2,7 +2,14 @@
 {
     public static class HttpUtils<T>
     {
-        public static HttpResponseBase<T> GenerateHttpSuccessResponse(int status, T content)
+        public static HttpResponseBase<T> GenerateHttpResponse(int status)
+        {
+            return new HttpResponseBase<T>
+            {
+                HttpStatusCode = status
+            };
+        }
+        public static HttpResponseBase<T> GenerateHttpResponse(int status, T content)
         {
             return new HttpResponseBase<T>
             {
@@ -13,44 +20,27 @@
         
         public static HttpResponseBase<T> GenerateHttpSuccessResponse()
         {
-            return new HttpResponseBase<T>
-            {
-                HttpStatusCode = StatusCodes.Status200OK
-            };
+            return GenerateHttpResponse(StatusCodes.Status200OK);
         }
         
         public static HttpResponseBase<T> GenerateHttpSuccessResponse(T content)
         {
-            return new HttpResponseBase<T>
-            {
-                HttpStatusCode = StatusCodes.Status200OK,
-                Content = content,
-            };
+            return GenerateHttpResponse(StatusCodes.Status200OK, content);
         }
 
         public static HttpResponseBase<T> GenerateHttpBadRequestResponse()
         {
-            return new HttpResponseBase<T>
-            {
-                HttpStatusCode = StatusCodes.Status400BadRequest
-            };
+            return GenerateHttpResponse(StatusCodes.Status400BadRequest);
         }
         
         public static HttpResponseBase<T> GenerateHttpBadRequestResponse(T content)
         {
-            return new HttpResponseBase<T>
-            {
-                HttpStatusCode = StatusCodes.Status400BadRequest,
-                Content = content,
-            };
+            return GenerateHttpResponse(StatusCodes.Status400BadRequest, content);
         }
 
         public static HttpResponseBase<T> GenerateHttpErrorResponse()
         {
-            return new HttpResponseBase<T>
-            {
-                HttpStatusCode = StatusCodes.Status500InternalServerError
-            };
+            return GenerateHttpResponse(StatusCodes.Status500InternalServerError);
         }
     }
 }

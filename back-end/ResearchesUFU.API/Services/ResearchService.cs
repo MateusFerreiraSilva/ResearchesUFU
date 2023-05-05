@@ -9,7 +9,7 @@ using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services
 {
-    public class ResearchService : IResearchService
+    public class ResearchService : BaseService<Research>, IResearchService
     {
         private readonly ResearchesUFUContext _dbContext;
         private readonly DbSet<Research> _researchesRepository;
@@ -21,7 +21,7 @@ namespace ResearchesUFU.API.Services
         private readonly ITagService _tagService;
         private readonly IAuthorService _authorService;
 
-        public readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public ResearchService(
             ResearchesUFUContext dbContext,
@@ -47,41 +47,47 @@ namespace ResearchesUFU.API.Services
 
         public async Task<HttpResponseBase<ResearchResponseDTO>> GetAsync(int id)
         {
-            try
+            var method = async delegate()
             {
-                var responseDTO = await BuildResearchResponseDTO(await FindOneAsync(id));
+                var responseDTO = await BuildResearchResponseDTO(await FindOneAsync(_researchesRepository, id));
 
-                var response = HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDTO);
+                if (responseDTO == null)
+                {
+                    return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
+                }
 
-                return response;
-            }
-            catch
-            {
-                return HttpUtils<ResearchResponseDTO>.GenerateHttpErrorResponse();
-            }
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDTO);
+            };
+            
+            var response = await ExecuteMethodAsync(method);
+
+            return response;
         }
 
         public async Task<HttpResponseBase<IQueryable<ResearchResponseDTO>>> GetAllAsync()
         {
-            try
+            var method = async delegate()
             {
-                var responseDTOList = (await FindAllAsync())
+                var responseDTOList = (await FindAllAsync(_researchesRepository))
                     .Select(r => BuildResearchResponseDTO(r).Result)
                     .AsQueryable();
 
-                var response = HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpSuccessResponse(responseDTOList);
+                if (responseDTOList == null || responseDTOList.Count().Equals(default(int)))
+                {
+                    return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpResponse(StatusCodes.Status404NotFound);
+                }
+                
+                return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpSuccessResponse(responseDTOList);
+            };
+            
+            var response = await ExecuteMethodAsync(method);
 
-                return response;
-            }
-            catch
-            {
-                return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpErrorResponse();
-            }
+            return response;
         }
 
         public async Task<HttpResponseBase<ResearchResponseDTO>> PostAsync(ResearchRequestDTO researchRequest)
         {
-            try
+            var method = async delegate()
             {
                 var research = _mapper.Map<Research>(researchRequest);
 
@@ -105,18 +111,18 @@ namespace ResearchesUFU.API.Services
                 var responseDTO = await BuildResearchResponseDTO(research);
 
                 return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDTO);
-            }
-            catch
-            {
-                return HttpUtils<ResearchResponseDTO>.GenerateHttpErrorResponse();
-            }
+            };
+            
+            var response = await ExecuteMethodAsync(method);
+
+            return response;
         }
 
         public async Task<HttpResponseBase<ResearchResponseDTO>> PutAsync(int id, ResearchRequestDTO researchRequest)
         {
-            try
+            var method = async delegate()
             {
-                var research = await FindOneAsync(id);
+                var research = await FindOneAsync(_researchesRepository, id);
 
                 var newFieldsIds = researchRequest.Fields.Select(f => f.Id);
                 var newFields = newFieldsIds.Select(id => _fieldService.FindOneAsync(id).Result).ToList();
@@ -152,18 +158,18 @@ namespace ResearchesUFU.API.Services
                 var researchDTO = await BuildResearchResponseDTO(research);
 
                 return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(researchDTO);
-            }
-            catch
-            {
-                return HttpUtils<ResearchResponseDTO>.GenerateHttpErrorResponse();
-            }
+            };
+            
+            var response = await ExecuteMethodAsync(method);
+
+            return response;
         }
 
         public async Task<HttpResponseBase<ResearchResponseDTO>> DeleteAsync(int id)
         {
-            try
+            var method = async delegate()
             {
-                var research = await FindOneAsync(id);
+                var research = await FindOneAsync(_researchesRepository, id);
 
                 var fields = await GetFieldsAsync(research.Id);
 
@@ -173,37 +179,11 @@ namespace ResearchesUFU.API.Services
                 await _dbContext.SaveChangesAsync();
 
                 return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse();
-            }
-            catch
-            {
-                return HttpUtils<ResearchResponseDTO>.GenerateHttpErrorResponse();
-            }
-        }
+            };
+            
+            var response = await ExecuteMethodAsync(method);
 
-        public async Task<Research> FindOneAsync(int id)
-        {
-            try
-            {
-                return await _researchesRepository.FindAsync(id);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public async Task<IQueryable<Research>> FindAllAsync()
-        {
-            try
-            {
-                var researchesList = await _researchesRepository.ToListAsync();
-
-                return researchesList.AsQueryable();
-            }
-            catch
-            {
-                return null;
-            }
+            return response;
         }
 
         private async Task<List<Field>> GetFieldsAsync(int id)
@@ -276,17 +256,17 @@ namespace ResearchesUFU.API.Services
         private async Task<List<Author>> GetAuthorsAsync(int id)
         {
             var researchAuthor = await _researchAuthorRepository.ToListAsync();
-            var auhtorsIds = researchAuthor.Where(ra => ra.ResearchId.Equals(id)).Select(ra => ra.AuthorId);
-            var authors = auhtorsIds.Select(id => _authorService.FindOneAsync(id).Result);
+            var authorsIds = researchAuthor.Where(ra => ra.ResearchId.Equals(id)).Select(ra => ra.AuthorId);
+            var authors = authorsIds.Select(id => _authorService.FindOneAsync(id).Result);
 
             return authors.ToList();
         }
 
         private void SaveAllAuthors(Research research, List<Author> authors)
         {
-            var researchAuhtorList = BuildResearchAuthorList(research, authors);
+            var researchAuthorList = BuildResearchAuthorList(research, authors);
 
-            _researchAuthorRepository.AddRange(researchAuhtorList);
+            _researchAuthorRepository.AddRange(researchAuthorList);
         }
 
         private void RemoveAllAuthors(Research research, List<Author> authors)

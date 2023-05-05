@@ -34,6 +34,9 @@ builder.Services.AddCors(options =>
     }
 );
 
+
+#region Configuring The Swagger
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -47,7 +50,10 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<ODataOperationFilter>();
 });
 
-// Add Db
+#endregion
+
+#region Add Database
+
 builder.Services.AddDbContext<ResearchesUFUContext>(options =>
     {
         var connectionString = builder.Configuration.GetConnectionString(Constants.DATEBASE_NAME);
@@ -55,14 +61,23 @@ builder.Services.AddDbContext<ResearchesUFUContext>(options =>
     }
 );
 
+#endregion
+
+#region Add AutoMapper
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-// Adding Services
+#endregion
+
+#region Adding Services
+
 builder.Services.AddScoped<IResearchService, ResearchService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFieldService, FieldService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
+
+#endregion
 
 var app = builder.Build();
 
@@ -78,17 +93,16 @@ app.MapControllers();
 
 app.UseCors(Constants.CORS_POLICY_NAME);
 
-ApplyMigrations(app);
+#region Applying Migrations
+
+var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<ResearchesUFUContext>();
+
+if (context.Database.GetPendingMigrations().Any()) {
+    context.Database.Migrate();
+}
+
+#endregion
 
 app.Run();
-
-void ApplyMigrations(WebApplication webApplication)
-{
-    var scope = webApplication.Services.CreateScope();
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ResearchesUFUContext>();
-    
-    if (context.Database.GetPendingMigrations().Any()) {
-        context.Database.Migrate();
-    }
-}
