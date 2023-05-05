@@ -82,19 +82,6 @@ ApplyMigrations(app);
 
 app.Run();
 
-// applying migrations
-
-// using (var scope = app.Services.CreateScope())
-// {
-//     var services = scope.ServiceProvider;
-//
-//     var context = services.GetRequiredService<ResearchesUFUContext>();
-//     if (context.Database.GetPendingMigrations().Any())
-//     {
-//         context.Database.Migrate();
-//     }
-// }
-
 void ApplyMigrations(WebApplication webApplication)
 {
     var scope = webApplication.Services.CreateScope();
