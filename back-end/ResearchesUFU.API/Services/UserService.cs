@@ -64,7 +64,7 @@ namespace ResearchesUFU.API.Services
 
                 if (user == null)
                 {
-                    return HttpUtils<UserAuthenticationResponseDTO>.GenerateHttpResponse(null);
+                    return HttpUtils<UserAuthenticationResponseDTO>.GenerateHttpSuccessResponse();
                 }
 
                 if (user.PasswordHash.Equals(passwordHash))
@@ -74,7 +74,7 @@ namespace ResearchesUFU.API.Services
                         UserId = user.Id,
                         Token = Guid.NewGuid().ToString() // random GUID :)
                     };
-                    return HttpUtils<UserAuthenticationResponseDTO>.GenerateHttpResponse(successResponse);
+                    return HttpUtils<UserAuthenticationResponseDTO>.GenerateHttpSuccessResponse(successResponse);
                 }
 
                 var failureResponse = new UserAuthenticationResponseDTO

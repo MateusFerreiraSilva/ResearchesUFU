@@ -2,47 +2,55 @@
 {
     public static class HttpUtils<T>
     {
-        public static HttpResponseBase<T> GenerateHttpResponse(T? content)
+        public static HttpResponseBase<T> GenerateHttpSuccessResponse(int status, T content)
         {
-            var httpResponse = new HttpResponseBase<T>(content);
-
-            try
+            return new HttpResponseBase<T>
             {
-                if (content == null)
-                {
-                    httpResponse.HttpStatusCode = StatusCodes.Status404NotFound;
-                }
-                else
-                {
-                    httpResponse.HttpStatusCode = StatusCodes.Status200OK;
-                }
-
-                return httpResponse;
-            }
-            catch (Exception ex)
-            {
-                return httpResponse; // HttpStatusCode will be the default (400) in this case
-            }
+                HttpStatusCode = status,
+                Content = content,
+            };
         }
-
+        
         public static HttpResponseBase<T> GenerateHttpSuccessResponse()
         {
-            return new HttpResponseBase<T>(StatusCodes.Status200OK);
+            return new HttpResponseBase<T>
+            {
+                HttpStatusCode = StatusCodes.Status200OK
+            };
+        }
+        
+        public static HttpResponseBase<T> GenerateHttpSuccessResponse(T content)
+        {
+            return new HttpResponseBase<T>
+            {
+                HttpStatusCode = StatusCodes.Status200OK,
+                Content = content,
+            };
         }
 
-        public static HttpResponseBase<T> GenerateHttpBadRequestResponse(T? content)
+        public static HttpResponseBase<T> GenerateHttpBadRequestResponse()
         {
-            if (content == null)
+            return new HttpResponseBase<T>
             {
-                return new HttpResponseBase<T>(StatusCodes.Status400BadRequest);
-            }
-
-            return new HttpResponseBase<T>(content);
+                HttpStatusCode = StatusCodes.Status400BadRequest
+            };
+        }
+        
+        public static HttpResponseBase<T> GenerateHttpBadRequestResponse(T content)
+        {
+            return new HttpResponseBase<T>
+            {
+                HttpStatusCode = StatusCodes.Status400BadRequest,
+                Content = content,
+            };
         }
 
         public static HttpResponseBase<T> GenerateHttpErrorResponse()
         {
-            return new HttpResponseBase<T>(StatusCodes.Status500InternalServerError);
+            return new HttpResponseBase<T>
+            {
+                HttpStatusCode = StatusCodes.Status500InternalServerError
+            };
         }
     }
 }

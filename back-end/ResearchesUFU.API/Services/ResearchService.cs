@@ -51,7 +51,7 @@ namespace ResearchesUFU.API.Services
             {
                 var responseDTO = await BuildResearchResponseDTO(await FindOneAsync(id));
 
-                var response = HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(responseDTO);
+                var response = HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDTO);
 
                 return response;
             }
@@ -69,7 +69,7 @@ namespace ResearchesUFU.API.Services
                     .Select(r => BuildResearchResponseDTO(r).Result)
                     .AsQueryable();
 
-                var response = HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpResponse(responseDTOList);
+                var response = HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpSuccessResponse(responseDTOList);
 
                 return response;
             }
@@ -104,7 +104,7 @@ namespace ResearchesUFU.API.Services
 
                 var responseDTO = await BuildResearchResponseDTO(research);
 
-                return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(responseDTO);
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDTO);
             }
             catch
             {
@@ -151,7 +151,7 @@ namespace ResearchesUFU.API.Services
 
                 var researchDTO = await BuildResearchResponseDTO(research);
 
-                return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(researchDTO);
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(researchDTO);
             }
             catch
             {
