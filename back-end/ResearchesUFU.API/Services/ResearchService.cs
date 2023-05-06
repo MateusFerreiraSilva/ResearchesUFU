@@ -9,7 +9,7 @@ using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services
 {
-    public class ResearchService : BaseService<Research>, IResearchService
+    public class ResearchService : BaseService, IResearchService
     {
         private readonly ResearchesUFUContext _dbContext;
         private readonly DbSet<Research> _researchesRepository;

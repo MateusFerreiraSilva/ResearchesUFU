@@ -4,9 +4,9 @@ using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services;
 
-public class BaseService<T> : IBaseService<T> where T : class
+public class BaseService: IBaseService
 {
-    public async Task<HttpResponseBase<U>> ExecuteMethodAsync<U>(Func<Task<HttpResponseBase<U>>> method)
+    public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpResponseBase<T>>> method)
     {
         try
         {
@@ -14,10 +14,10 @@ public class BaseService<T> : IBaseService<T> where T : class
         }
         catch
         {
-            return HttpUtils<U>.GenerateHttpErrorResponse();
+            return HttpUtils<T>.GenerateHttpErrorResponse();
         }
     }
-    public async Task<T> FindOneAsync(DbSet<T> repository, int id)
+    public async Task<T> FindOneAsync<T>(DbSet<T> repository, int id) where T : class
     {
         try
         {
@@ -29,7 +29,7 @@ public class BaseService<T> : IBaseService<T> where T : class
         }
     }
 
-    public async Task<IQueryable<T>> FindAllAsync(DbSet<T> repository)
+    public async Task<IQueryable<T>> FindAllAsync<T>(DbSet<T> repository) where T : class
     {
         try
         {
