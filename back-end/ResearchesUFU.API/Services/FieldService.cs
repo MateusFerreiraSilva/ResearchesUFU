@@ -6,7 +6,7 @@ namespace ResearchesUFU.API.Services
 {
     public class FieldService : BaseService<Field>, IFieldService
     {
-        public FieldService(ResearchesUFUContext dbContext, IResearchService researchService)
+        public FieldService(ResearchesUFUContext dbContext)
         {
             DbContext = dbContext;
             Repository = DbContext.Fields;
