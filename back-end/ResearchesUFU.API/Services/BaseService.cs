@@ -1,12 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using ResearchesUFU.API.Context;
 using ResearchesUFU.API.Services.Interfaces;
 using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services;
 
-public class BaseService: IBaseService
+public abstract class BaseService<T> : IBaseService<T> where T : class
 {
-    public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpResponseBase<T>>> method)
+    protected ResearchesUFUContext DbContext;
+    protected DbSet<T>? Repository;
+    
+    public async Task<HttpResponseBase<U>> ExecuteMethodAsync<U>(Func<Task<HttpResponseBase<U>>> method)
     {
         try
         {
@@ -14,14 +18,14 @@ public class BaseService: IBaseService
         }
         catch
         {
-            return HttpUtils<T>.GenerateHttpErrorResponse();
+            return HttpUtils<U>.GenerateHttpErrorResponse();
         }
     }
-    public async Task<T> FindOneAsync<T>(DbSet<T> repository, int id) where T : class
+    public async Task<T> FindOneAsync(int id)
     {
         try
         {
-            return await repository.FindAsync(id);
+            return await Repository.FindAsync(id);
         }
         catch
         {
@@ -29,13 +33,28 @@ public class BaseService: IBaseService
         }
     }
 
-    public async Task<IQueryable<T>> FindAllAsync<T>(DbSet<T> repository) where T : class
+    public async Task<List<T>> FindManyAsync(IEnumerable<int> ids)
     {
         try
         {
-            var researchesList = await repository.ToListAsync();
+            var queries = ids.Select(id => FindOneAsync(id));
+            var queryResults = (await Task.WhenAll(queries)).ToList();
 
-            return researchesList.AsQueryable();
+            return queryResults;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+    
+    public async Task<IQueryable<T>> FindAllAsync()
+    {
+        try
+        {
+            var queryResponse = await Repository.ToListAsync();
+
+            return queryResponse.AsQueryable();
         }
         catch
         {

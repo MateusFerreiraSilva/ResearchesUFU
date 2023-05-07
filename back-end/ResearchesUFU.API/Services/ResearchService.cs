@@ -9,15 +9,13 @@ using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services
 {
-    public class ResearchService : BaseService, IResearchService
+    public class ResearchService : BaseService<Research>, IResearchService
     {
-        private readonly ResearchesUFUContext _dbContext;
-        private readonly DbSet<Research> _researchesRepository;
         private readonly DbSet<ResearchField> _researchFieldRepository;
         private readonly DbSet<ResearchTag> _researchTagRepository;
         private readonly DbSet<ResearchAuthor> _researchAuthorRepository;
 
-        private readonly IFieldService _fieldService;
+        private readonly IBaseService<Field> _fieldService;
         private readonly ITagService _tagService;
         private readonly IAuthorService _authorService;
 
@@ -31,12 +29,11 @@ namespace ResearchesUFU.API.Services
             IMapper mapper
         )
         {
-            _dbContext = dbContext;
-
-            _researchesRepository = _dbContext.Researches;
-            _researchFieldRepository = _dbContext.ResearchField;
-            _researchTagRepository = _dbContext.ResearchTag;
-            _researchAuthorRepository = _dbContext.ResearchAuthor;
+            DbContext = dbContext;
+            Repository = DbContext.Researches;
+            _researchFieldRepository = DbContext.ResearchField;
+            _researchTagRepository = DbContext.ResearchTag;
+            _researchAuthorRepository = DbContext.ResearchAuthor;
 
             _fieldService = fieldService;
             _tagService = tagService;
@@ -49,7 +46,7 @@ namespace ResearchesUFU.API.Services
         {
             var method = async delegate()
             {
-                var responseDTO = await BuildResearchResponseDTO(await FindOneAsync(_researchesRepository, id));
+                var responseDTO = await BuildResearchResponseDTO(await FindOneAsync(id));
 
                 if (responseDTO == null)
                 {
@@ -68,7 +65,7 @@ namespace ResearchesUFU.API.Services
         {
             var method = async delegate()
             {
-                var responseDTOList = (await FindAllAsync(_researchesRepository))
+                var responseDTOList = (await FindAllAsync())
                     .Select(r => BuildResearchResponseDTO(r).Result)
                     .AsQueryable();
 
@@ -90,23 +87,18 @@ namespace ResearchesUFU.API.Services
             var method = async delegate()
             {
                 var research = _mapper.Map<Research>(researchRequest);
-
-                var fieldsIds = researchRequest.Fields.Select(f => f.Id);
-                var fields = fieldsIds.Select(id => _fieldService.FindOneAsync(id).Result).ToList();
                 
-                var tagsIds = researchRequest.Tags.Select(t => t.Id);
-                var tags = tagsIds.Select(id => _tagService.FindOneAsync(id).Result).ToList();
+                var fields = await _fieldService.FindManyAsync(researchRequest.Fields.Select(f => f.Id));
+                var tags = await _tagService.FindManyAsync(researchRequest.Tags.Select(t => t.Id));
+                var authors = await _authorService.FindManyAsync(researchRequest.Authors.Select(a => a.Id));
 
-                var authorsIds = researchRequest.Authors.Select(a => a.Id);
-                var authors = authorsIds.Select(id => _authorService.FindOneAsync(id).Result).ToList();
-
-                _researchesRepository.Add(research);
+                Repository.Add(research);
                 SaveAllFields(research, fields);
                 SaveAllTags(research, tags);
                 SaveAllAuthors(research, authors);
 
-                await _dbContext.SaveChangesAsync();
-                _dbContext.Entry(research).State = EntityState.Detached;
+                await DbContext.SaveChangesAsync();
+                DbContext.Entry(research).State = EntityState.Detached;
 
                 var responseDTO = await BuildResearchResponseDTO(research);
 
@@ -122,7 +114,7 @@ namespace ResearchesUFU.API.Services
         {
             var method = async delegate()
             {
-                var research = await FindOneAsync(_researchesRepository, id);
+                var research = await FindOneAsync(id);
 
                 var newFieldsIds = researchRequest.Fields.Select(f => f.Id);
                 var newFields = newFieldsIds.Select(id => _fieldService.FindOneAsync(id).Result).ToList();
@@ -136,12 +128,12 @@ namespace ResearchesUFU.API.Services
                 var newAuthors = newAuthorsIds.Select(id => _authorService.FindOneAsync(id).Result).ToList();
                 var oldAuthors = await GetAuthorsAsync(id);
 
-                _dbContext.Entry(research).State = EntityState.Detached;
+                DbContext.Entry(research).State = EntityState.Detached;
 
                 research = _mapper.Map<Research>(researchRequest);
                 research.Id = id;
 
-                _researchesRepository.Update(research);
+                Repository.Update(research);
 
                 RemoveAllFields(research, oldFields);
                 SaveAllFields(research, newFields);
@@ -153,7 +145,7 @@ namespace ResearchesUFU.API.Services
                 SaveAllAuthors(research, newAuthors);
 
 
-                await _dbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
 
                 var researchDTO = await BuildResearchResponseDTO(research);
 
@@ -169,14 +161,14 @@ namespace ResearchesUFU.API.Services
         {
             var method = async delegate()
             {
-                var research = await FindOneAsync(_researchesRepository, id);
+                var research = await FindOneAsync(id);
 
                 var fields = await GetFieldsAsync(research.Id);
 
-                _researchesRepository.Remove(research);
+                Repository.Remove(research);
                 RemoveAllFields(research, fields);
 
-                await _dbContext.SaveChangesAsync();
+                await DbContext.SaveChangesAsync();
 
                 return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse();
             };

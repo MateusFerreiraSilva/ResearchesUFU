@@ -2,10 +2,7 @@
 
 namespace ResearchesUFU.API.Services.Interfaces
 {
-    public interface ITagService
+    public interface ITagService : IBaseService<Tag>
     {
-        public Task<Tag> FindOneAsync(int id);
-
-        public Task<IQueryable<Tag>> FindAllAsync();
     }
 }

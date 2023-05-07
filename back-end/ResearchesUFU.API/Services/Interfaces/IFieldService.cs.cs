@@ -2,10 +2,7 @@
 
 namespace ResearchesUFU.API.Services.Interfaces
 {
-    public interface IFieldService
+    public interface IFieldService : IBaseService<Field>
     {
-        public Task<Field> FindOneAsync(int id);
-
-        public Task<IQueryable<Field>> FindAllAsync();
     }
 }

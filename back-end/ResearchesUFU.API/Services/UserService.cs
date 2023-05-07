@@ -8,43 +8,14 @@ using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services
 {
-    public class UserService : IUserService
+    public class UserService : BaseService<User>, IUserService
     {
-        private readonly ResearchesUFUContext _dbContext;
-        private readonly DbSet<User> _userRepository;
-
         public UserService(ResearchesUFUContext dbContext)
         {
-            _dbContext = dbContext;
-
-            _userRepository = _dbContext.Users;
+            DbContext = dbContext;
+            Repository = DbContext.Users;
         }
-        public async Task<User> FindOneAsync(int id)
-        {
-            try
-            {
-                return await _userRepository.FindAsync(id);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public async Task<IQueryable<User>> FindAllAsync()
-        {
-            try
-            {
-                var fieldsList = await _userRepository.ToListAsync();
-
-                return fieldsList.AsQueryable();
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
+        
         public async Task<HttpResponseBase<UserAuthenticationResponseDTO>> AuthenticateUserAsync(UserAuthenticationRequestDTO userAuthenticationRequest)
         {
             try

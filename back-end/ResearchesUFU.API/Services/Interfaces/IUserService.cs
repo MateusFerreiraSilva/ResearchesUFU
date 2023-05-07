@@ -5,12 +5,8 @@ using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services.Interfaces
 {
-    public interface IUserService
+    public interface IUserService : IBaseService<User>
     {
-        public Task<User> FindOneAsync(int id);
-
-        public Task<IQueryable<User>> FindAllAsync();
-
         public Task<HttpResponseBase<UserAuthenticationResponseDTO>> AuthenticateUserAsync(UserAuthenticationRequestDTO userAuthenticationRequest);
     }
 }

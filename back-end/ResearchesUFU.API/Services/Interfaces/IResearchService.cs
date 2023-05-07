@@ -5,7 +5,7 @@ using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services.Interfaces
 {
-    public interface IResearchService
+    public interface IResearchService: IBaseService<Research>
     {
         public Task<HttpResponseBase<ResearchResponseDTO>> GetAsync(int id);
         
