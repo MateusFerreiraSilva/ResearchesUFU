@@ -5,7 +5,7 @@ using ResearchesUFU.API.Utils;
 
 namespace ResearchesUFU.API.Services.Interfaces
 {
-    public interface IUserService : IBaseService<User>
+    public interface IUserService
     {
         public Task<HttpResponseBase<UserAuthenticationResponseDTO>> AuthenticateUserAsync(UserAuthenticationRequestDTO userAuthenticationRequest);
     }

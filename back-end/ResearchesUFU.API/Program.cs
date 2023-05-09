@@ -6,6 +6,9 @@ using ResearchesUFU.API.Services;
 using ResearchesUFU.API.Services.Interfaces;
 using ResearchesUFU.API.Utils;
 using System.Reflection;
+using ResearchesUFU.API.Models;
+using ResearchesUFU.API.Repositories;
+using ResearchesUFU.API.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +21,10 @@ builder.Services.AddControllers()
             .OrderBy()
             .SetMaxTop(Constants.MAX_TOP)
             .Count()
-);
+    ).AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    );
+;
 
 builder.Services.AddCors(options =>
     {
@@ -72,10 +78,9 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #region Adding Services
 
 builder.Services.AddScoped<IResearchService, ResearchService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IFieldService, FieldService>();
-builder.Services.AddScoped<ITagService, TagService>();
-builder.Services.AddScoped<IAuthorService, AuthorService>();
+// builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IBaseRepository<Research>, ResearchRepository>();
 
 #endregion
 

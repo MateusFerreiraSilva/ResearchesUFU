@@ -1,16 +1,20 @@
-using Microsoft.EntityFrameworkCore;
-using ResearchesUFU.API.Context;
-using ResearchesUFU.API.Services.Interfaces;
+using ResearchesUFU.API.Repositories.Interfaces;
 using ResearchesUFU.API.Utils;
+using System.Reflection;
 
 namespace ResearchesUFU.API.Services;
 
-public abstract class BaseService<T> : IBaseService<T> where T : class
+public abstract class BaseService<TEntity> where TEntity : class
+
 {
-    protected ResearchesUFUContext DbContext;
-    protected DbSet<T>? Repository;
-    
-    public async Task<HttpResponseBase<U>> ExecuteMethodAsync<U>(Func<Task<HttpResponseBase<U>>> method)
+    private IBaseRepository<TEntity> _repository;
+
+    public BaseService(IBaseRepository<TEntity> repository)
+    {
+        _repository = repository;
+    }
+
+public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpResponseBase<T>>> method)
     {
         try
         {
@@ -18,28 +22,28 @@ public abstract class BaseService<T> : IBaseService<T> where T : class
         }
         catch
         {
-            return HttpUtils<U>.GenerateHttpErrorResponse();
+            return HttpUtils<T>.GenerateHttpErrorResponse();
         }
     }
-    public async Task<T> FindOneAsync(int id)
+    public async Task<TEntity> GetOneAsync(int id)
     {
         try
         {
-            return await Repository.FindAsync(id);
+            return await _repository.GetOneAsync(id);
         }
         catch
         {
             return null;
         }
     }
-
-    public async Task<List<T>> FindManyAsync(IEnumerable<int> ids)
+    
+    public async Task<List<TEntity>> GetManyAsync(IEnumerable<int> ids)
     {
         try
         {
-            var queries = ids.Select(id => FindOneAsync(id));
+            var queries = ids.Select(id => GetOneAsync(id));
             var queryResults = (await Task.WhenAll(queries)).ToList();
-
+    
             return queryResults;
         }
         catch
@@ -48,17 +52,36 @@ public abstract class BaseService<T> : IBaseService<T> where T : class
         }
     }
     
-    public async Task<IQueryable<T>> FindAllAsync()
+    public async Task<IEnumerable<TEntity>> GetAllAsync()
     {
         try
         {
-            var queryResponse = await Repository.ToListAsync();
-
-            return queryResponse.AsQueryable();
+            return await _repository.GetAllAsync();
         }
         catch
         {
             return null;
         }
     }
+    
+    // public async Task<List<U>> GetSubEntitiesAsync<T, U>(
+    //     int id, IBaseRepository<T> manyToManyRepository, IBaseRepository<U> subEntitiesRepository
+    //     )
+    //     where T : class 
+    //     where U : class
+    // {
+    //     var manyToManyEntity= (await manyToManyRepository.GetAllAsync()).Where();
+    //     var subEntity = await subEntitiesRepository.GetOneAsync(manyToManyEntity.GetCustomAttribute);
+    //
+    //     return tags.ToList();
+    // }
+    //
+    // public async Task<List<T>> GetSubEntityAsync<T, R>(int id, IBaseRepository<R> manyToManyRepository)
+    // {
+    //     var researchTag= await _researchTagRepository.ToListAsync();
+    //     var tagsIds = researchTag.Where(rt => rt.ResearchId.Equals(id)).Select(rt => rt.TagId);
+    //     var tags = tagsIds.Select(id => _tagService.FindOneAsync(id).Result);
+    //     
+    //     return tags.ToList();
+    // }
 }
