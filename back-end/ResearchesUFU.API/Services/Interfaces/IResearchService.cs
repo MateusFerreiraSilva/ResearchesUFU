@@ -7,12 +7,10 @@ namespace ResearchesUFU.API.Services.Interfaces
 {
     public interface IResearchService
     {
-        public Task<HttpResponseBase<Research>> GetAsync(int id);
-
-        // public Task<HttpResponseBase<ResearchResponseDTO>> GetAsync(int id);
+        public Task<HttpResponseBase<ResearchResponseDTO>> GetAsync(int id);
         
-        // public Task<HttpResponseBase<IQueryable<ResearchResponseDTO>>> GetAsync();
-        //
+        public Task<HttpResponseBase<IQueryable<ResearchResponseDTO>>> GetAsync();
+        
         // public Task<HttpResponseBase<ResearchResponseDTO>> PostAsync(ResearchRequestDTO research);
         //
         // public Task<HttpResponseBase<ResearchResponseDTO>> PutAsync(int id, ResearchRequestDTO research);

@@ -52,7 +52,7 @@ public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpRespo
         }
     }
     
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public async Task<IQueryable<TEntity>> GetAllAsync()
     {
         try
         {

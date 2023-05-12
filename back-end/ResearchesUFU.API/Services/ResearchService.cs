@@ -21,18 +21,18 @@ namespace ResearchesUFU.API.Services
             _mapper = mapper;
         }
         
-        public async Task<HttpResponseBase<Research>> GetAsync(int id)
+        public async Task<HttpResponseBase<ResearchResponseDTO>> GetAsync(int id)
         {
             var method = async delegate()
             {
-                var responseDTO = await GetOneAsync(id);
+                var research = await GetOneAsync(id);
 
-                if (responseDTO == null)
+                if (research == null)
                 {
-                    return HttpUtils<Research>.GenerateHttpResponse(StatusCodes.Status404NotFound);
+                    return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
                 }
 
-                return HttpUtils<Research>.GenerateHttpSuccessResponse(responseDTO);
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(_mapper.Map<ResearchResponseDTO>(research));
             };
             
             var response = await ExecuteMethodAsync(method);
@@ -40,45 +40,26 @@ namespace ResearchesUFU.API.Services
             return response;
         }
 
-        // public async Task<HttpResponseBase<ResearchResponseDTO>> GetAsync(int id)
-        // {
-        //     var method = async delegate()
-        //     {
-        //         var responseDTO = await BuildResearchResponseDTO(await GetOneAsync(id));
-        //
-        //         if (responseDTO == null)
-        //         {
-        //             return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
-        //         }
-        //
-        //         return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDTO);
-        //     };
-        //     
-        //     var response = await ExecuteMethodAsync(method);
-        //
-        //     return response;
-        // }
-
-        // public async Task<HttpResponseBase<IQueryable<ResearchResponseDTO>>> GetAsync()
-        // {
-        //     var method = async delegate()
-        //     {
-        //         var responseDTOList = (await GetAllAsync())
-        //             .Select(r => BuildResearchResponseDTO(r).Result)
-        //             .AsQueryable();
-        //
-        //         if (responseDTOList == null || responseDTOList.Count().Equals(default(int)))
-        //         {
-        //             return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpResponse(StatusCodes.Status404NotFound);
-        //         }
-        //         
-        //         return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpSuccessResponse(responseDTOList);
-        //     };
-        //     
-        //     var response = await ExecuteMethodAsync(method);
-        //
-        //     return response;
-        // }
+        public async Task<HttpResponseBase<IQueryable<ResearchResponseDTO>>> GetAsync()
+        {
+            var method = async delegate()
+            {
+                var researches = await GetAllAsync();
+        
+                if (researches == null || researches.Count().Equals(default(int)))
+                {
+                    return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpResponse(StatusCodes.Status404NotFound);
+                }
+                
+                return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpSuccessResponse(
+                    researches.Select(r => _mapper.Map<ResearchResponseDTO>(r))
+                );
+            };
+            
+            var response = await ExecuteMethodAsync(method);
+        
+            return response;
+        }
 
         // public async Task<HttpResponseBase<ResearchResponseDTO>> PostAsync(ResearchRequestDTO researchRequest)
         // {
