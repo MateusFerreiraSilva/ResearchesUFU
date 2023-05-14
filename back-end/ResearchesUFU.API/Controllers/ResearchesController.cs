@@ -64,26 +64,26 @@ namespace ResearchesUFU.API.Controllers
             };
         }
 
-        // /// <summary>
-        // /// Register a new research
-        // /// </summary>
-        // /// <returns>The new <see cref="ResearchResponseDTO">research</see></returns>
-        // [HttpPost]
-        // [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDTO))]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        // public async Task<IActionResult> Post([FromBody, Required] ResearchRequestDTO research)
-        // {
-        //     var response = await _researchService.PostAsync(research);
-        //
-        //     return response.HttpStatusCode switch
-        //     {
-        //         StatusCodes.Status200OK => Ok(response.Content),
-        //         StatusCodes.Status500InternalServerError => StatusCode(response.HttpStatusCode),
-        //         _ => BadRequest(),
-        //     };
-        // }
-        //
+        /// <summary>
+        /// Register a new research
+        /// </summary>
+        /// <returns>The new <see cref="ResearchResponseDTO">research</see></returns>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Post([FromBody, Required] ResearchRequestDTO research)
+        {
+            var response = await _researchService.PostAsync(research);
+        
+            return response.HttpStatusCode switch
+            {
+                StatusCodes.Status200OK => Ok(response.Content),
+                StatusCodes.Status500InternalServerError => StatusCode(response.HttpStatusCode),
+                _ => BadRequest(),
+            };
+        }
+        
         // /// <summary>
         // /// Update a research of wiht the given id.
         // /// </summary>

@@ -41,4 +41,20 @@
 	  <Folder Include="Images\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Remove="Repositories\Utils\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Remove="Repositories\Utils\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Repositories\Utils\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="Repositories\Utils\**" />
+	</ItemGroup>
+
 </Project>

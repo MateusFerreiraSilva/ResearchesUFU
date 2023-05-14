@@ -25,7 +25,7 @@ namespace ResearchesUFU.API.Services
         {
             var method = async delegate()
             {
-                var research = await GetOneAsync(id);
+                var research = AddRelationships(await GetOneAsync(id));
 
                 if (research == null)
                 {
@@ -61,33 +61,26 @@ namespace ResearchesUFU.API.Services
             return response;
         }
 
-        // public async Task<HttpResponseBase<ResearchResponseDTO>> PostAsync(ResearchRequestDTO researchRequest)
-        // {
-        //     var method = async delegate()
-        //     {
-        //         var research = _mapper.Map<Research>(researchRequest);
-        //         
-        //         var fields = await _fieldService.FindManyAsync(researchRequest.Fields.Select(f => f.Id));
-        //         var tags = await _tagService.FindManyAsync(researchRequest.Tags.Select(t => t.Id));
-        //         var authors = await _authorService.FindManyAsync(researchRequest.Authors.Select(a => a.Id));
-        //
-        //         Repository.Add(research);
-        //         SaveAllFields(research, fields);
-        //         SaveAllTags(research, tags);
-        //         SaveAllAuthors(research, authors);
-        //
-        //         await DbContext.SaveChangesAsync();
-        //         DbContext.Entry(research).State = EntityState.Detached;
-        //
-        //         var responseDTO = await BuildResearchResponseDTO(research);
-        //
-        //         return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDTO);
-        //     };
-        //     
-        //     var response = await ExecuteMethodAsync(method);
-        //
-        //     return response;
-        // }
+        public async Task<HttpResponseBase<ResearchResponseDTO>> PostAsync(ResearchRequestDTO researchRequest)
+        {
+            var method = async delegate()
+            {
+                var research = _mapper.Map<Research>(researchRequest);
+
+                Insert(research);
+                await SaveAsync();
+                
+                // DbContext.Entry(research).State = EntityState.Detached;
+
+                var responseDTO = _mapper.Map<ResearchResponseDTO>(research);
+        
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDTO);
+            };
+            
+            var response = await ExecuteMethodAsync(method);
+        
+            return response;
+        }
         //
         // public async Task<HttpResponseBase<ResearchResponseDTO>> PutAsync(int id, ResearchRequestDTO researchRequest)
         // {
@@ -280,5 +273,28 @@ namespace ResearchesUFU.API.Services
         //
         //     return null;
         // }
+
+        private Research AddRelationships(Research research)
+        {
+            research.ResearchField.ForEach(rf =>
+            {
+                rf.ResearchId = research.Id;
+                // rf.Research = research;
+            });
+            
+            research.ResearchTag.ForEach(rt =>
+            {
+                rt.ResearchId = research.Id;
+                // rt.Research = research;
+            });
+            
+            research.ResearchAuthor.ForEach(ra =>
+            {
+                ra.ResearchId = research.Id;
+                // ra.Research = research;
+            });
+
+            return research;
+        }
     }
 }

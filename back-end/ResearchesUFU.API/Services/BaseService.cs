@@ -63,7 +63,17 @@ public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpRespo
             return null;
         }
     }
-    
+
+    public void Insert(TEntity requestEntity)
+    {
+        _repository.Insert(requestEntity);
+    }
+
+    public async Task SaveAsync()
+    {
+        await _repository.SaveAsync();
+    }
+
     // public async Task<List<U>> GetSubEntitiesAsync<T, U>(
     //     int id, IBaseRepository<T> manyToManyRepository, IBaseRepository<U> subEntitiesRepository
     //     )
