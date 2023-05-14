@@ -84,48 +84,48 @@ namespace ResearchesUFU.API.Controllers
             };
         }
         
-        // /// <summary>
-        // /// Update a research of wiht the given id.
-        // /// </summary>
-        // /// <returns><see cref="Research">Research after the update</see></returns>
-        // [HttpPut("{id:int}")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // [ProducesResponseType(StatusCodes.Status404NotFound)]
-        // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // public async Task<IActionResult> Put([Required] int id, [FromBody, Required] ResearchRequestDTO research)
-        // {
-        //     var response = await _researchService.PutAsync(id, research);
-        //
-        //     return response.HttpStatusCode switch
-        //     {
-        //         StatusCodes.Status200OK => Ok(),
-        //         StatusCodes.Status404NotFound => NotFound(),
-        //         StatusCodes.Status500InternalServerError => StatusCode(response.HttpStatusCode),
-        //         _ => BadRequest(),
-        //     };
-        // }
-        //
-        // /// <summary>
-        // /// Update a research of wiht the given id.
-        // /// </summary>
-        // /// <returns><see cref="Research">Research after the update</see></returns>
-        // [HttpDelete("{id:int}")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // [ProducesResponseType(StatusCodes.Status404NotFound)]
-        // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // public async Task<IActionResult> Delete([Required] int id)
-        // {
-        //     var response = await _researchService.DeleteAsync(id);
-        //
-        //     return response.HttpStatusCode switch
-        //     {
-        //         StatusCodes.Status200OK => Ok(),
-        //         StatusCodes.Status404NotFound => NotFound(),
-        //         StatusCodes.Status500InternalServerError => StatusCode(response.HttpStatusCode),
-        //         _ => BadRequest(),
-        //     };
-        // }
+        /// <summary>
+        /// Update a research of with the given id.
+        /// </summary>
+        /// <returns><see cref="ResearchResponseDTO">Research after the update</see></returns>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Put([Required] int id, [FromBody, Required] ResearchRequestDTO research)
+        {
+            var response = await _researchService.PutAsync(id, research);
+        
+            return response.HttpStatusCode switch
+            {
+                StatusCodes.Status200OK => Ok(),
+                StatusCodes.Status404NotFound => NotFound(),
+                StatusCodes.Status500InternalServerError => StatusCode(response.HttpStatusCode),
+                _ => BadRequest(),
+            };
+        }
+        
+        /// <summary>
+        /// Delete a research of with the given id.
+        /// </summary>
+        /// <returns><see cref="ResearchResponseDTO">Status of the deletion</see></returns>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete([Required] int id)
+        {
+            var response = await _researchService.DeleteAsync(id);
+        
+            return response.HttpStatusCode switch
+            {
+                StatusCodes.Status200OK => Ok(),
+                StatusCodes.Status404NotFound => NotFound(),
+                StatusCodes.Status500InternalServerError => StatusCode(response.HttpStatusCode),
+                _ => BadRequest(),
+            };
+        }
     }
 }

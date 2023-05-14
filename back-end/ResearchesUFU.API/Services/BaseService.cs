@@ -68,30 +68,19 @@ public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpRespo
     {
         _repository.Insert(requestEntity);
     }
+    
+    public void Update(TEntity newEntity, TEntity oldEntity)
+    {
+        _repository.Update(newEntity, oldEntity);
+    }
+
+    public void Delete(TEntity requestEntity)
+    {   
+        _repository.Delete(requestEntity);
+    }
 
     public async Task SaveAsync()
     {
         await _repository.SaveAsync();
     }
-
-    // public async Task<List<U>> GetSubEntitiesAsync<T, U>(
-    //     int id, IBaseRepository<T> manyToManyRepository, IBaseRepository<U> subEntitiesRepository
-    //     )
-    //     where T : class 
-    //     where U : class
-    // {
-    //     var manyToManyEntity= (await manyToManyRepository.GetAllAsync()).Where();
-    //     var subEntity = await subEntitiesRepository.GetOneAsync(manyToManyEntity.GetCustomAttribute);
-    //
-    //     return tags.ToList();
-    // }
-    //
-    // public async Task<List<T>> GetSubEntityAsync<T, R>(int id, IBaseRepository<R> manyToManyRepository)
-    // {
-    //     var researchTag= await _researchTagRepository.ToListAsync();
-    //     var tagsIds = researchTag.Where(rt => rt.ResearchId.Equals(id)).Select(rt => rt.TagId);
-    //     var tags = tagsIds.Select(id => _tagService.FindOneAsync(id).Result);
-    //     
-    //     return tags.ToList();
-    // }
 }

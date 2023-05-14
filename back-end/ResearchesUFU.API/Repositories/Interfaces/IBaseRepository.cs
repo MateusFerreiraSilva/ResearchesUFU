@@ -8,7 +8,7 @@ public interface IBaseRepository<TEntity> where TEntity : class
 
     public void Insert(TEntity entity);
     
-    public void Update(TEntity entity);
+    public void Update(TEntity oldEntity, TEntity newEntity);
     
     public void Delete(TEntity entity);
 
