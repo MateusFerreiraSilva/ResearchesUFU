@@ -12,10 +12,10 @@
 
         public string Thumbnail { get; set; } = string.Empty;
 
-        public List<FieldRequestDTO> Fields { get; set; } = null!;
+        public List<ResearchFieldRequestDto> Fields { get; set; } = null!;
 
-        public List<TagRequestDTO> Tags { get; set; } = null!;
+        public List<ResearchTagRequestDto> Tags { get; set; } = null!;
 
-        public List<AuthorRequestDTO> Authors { get; set; } = null!;
+        public List<ResearchAuthorRequestDto> Authors { get; set; } = null!;
     }
 }

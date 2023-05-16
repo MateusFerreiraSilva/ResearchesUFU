@@ -29,13 +29,13 @@ namespace ResearchesUFU.API.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            OneTooneRelationshipConfiguration(modelBuilder);
+            OneToOneRelationshipConfiguration(modelBuilder);
             ManyToManyRelationshipConfiguration(modelBuilder);
 
             DataSeed.Seed(modelBuilder);
         }
 
-        private void OneTooneRelationshipConfiguration(ModelBuilder modelBuilder)
+        private void OneToOneRelationshipConfiguration(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Author)

@@ -53,8 +53,8 @@ namespace ResearchesUFU.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get()
         {
-            var response = await _researchService.GetAllAsync();
-
+            var response = await _researchService.GetAsync();
+        
             return response.HttpStatusCode switch
             {
                 StatusCodes.Status200OK => Ok(response.Content),
@@ -75,7 +75,7 @@ namespace ResearchesUFU.API.Controllers
         public async Task<IActionResult> Post([FromBody, Required] ResearchRequestDTO research)
         {
             var response = await _researchService.PostAsync(research);
-
+        
             return response.HttpStatusCode switch
             {
                 StatusCodes.Status200OK => Ok(response.Content),
@@ -83,11 +83,11 @@ namespace ResearchesUFU.API.Controllers
                 _ => BadRequest(),
             };
         }
-
+        
         /// <summary>
-        /// Update a research of wiht the given id.
+        /// Update a research of with the given id.
         /// </summary>
-        /// <returns><see cref="Research">Research after the update</see></returns>
+        /// <returns><see cref="ResearchResponseDTO">Research after the update</see></returns>
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -96,7 +96,7 @@ namespace ResearchesUFU.API.Controllers
         public async Task<IActionResult> Put([Required] int id, [FromBody, Required] ResearchRequestDTO research)
         {
             var response = await _researchService.PutAsync(id, research);
-
+        
             return response.HttpStatusCode switch
             {
                 StatusCodes.Status200OK => Ok(),
@@ -105,11 +105,11 @@ namespace ResearchesUFU.API.Controllers
                 _ => BadRequest(),
             };
         }
-
+        
         /// <summary>
-        /// Update a research of wiht the given id.
+        /// Delete a research of with the given id.
         /// </summary>
-        /// <returns><see cref="Research">Research after the update</see></returns>
+        /// <returns><see cref="ResearchResponseDTO">Status of the deletion</see></returns>
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -118,7 +118,7 @@ namespace ResearchesUFU.API.Controllers
         public async Task<IActionResult> Delete([Required] int id)
         {
             var response = await _researchService.DeleteAsync(id);
-
+        
             return response.HttpStatusCode switch
             {
                 StatusCodes.Status200OK => Ok(),

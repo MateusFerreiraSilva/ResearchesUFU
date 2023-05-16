@@ -6,6 +6,9 @@ using ResearchesUFU.API.Services;
 using ResearchesUFU.API.Services.Interfaces;
 using ResearchesUFU.API.Utils;
 using System.Reflection;
+using ResearchesUFU.API.Models;
+using ResearchesUFU.API.Repositories;
+using ResearchesUFU.API.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +21,10 @@ builder.Services.AddControllers()
             .OrderBy()
             .SetMaxTop(Constants.MAX_TOP)
             .Count()
-);
+    ).AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    );
+;
 
 builder.Services.AddCors(options =>
     {
@@ -34,6 +40,8 @@ builder.Services.AddCors(options =>
     }
 );
 
+
+#region Configuring The Swagger
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -46,23 +54,34 @@ builder.Services.AddSwaggerGen(options =>
     // Add support for OData-like REST endpoint with [EnableQuery]
     options.OperationFilter<ODataOperationFilter>();
 });
+#endregion
 
-// Add Db
+#region Add Database
 builder.Services.AddDbContext<ResearchesUFUContext>(options =>
     {
         var connectionString = builder.Configuration.GetConnectionString(Constants.DATEBASE_NAME);
         options.UseNpgsql(connectionString);
     }
 );
+#endregion
 
+#region Add AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+#endregion
 
-// Adding Services
+#region Adding Services
+
+#region Services
 builder.Services.AddScoped<IResearchService, ResearchService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IFieldService, FieldService>();
-builder.Services.AddScoped<ITagService, TagService>();
-builder.Services.AddScoped<IAuthorService, AuthorService>();
+#endregion
+
+#region Repositories
+builder.Services.AddScoped<IBaseRepository<Research>, ResearchRepository>();
+builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
+#endregion
+
+#endregion
 
 var app = builder.Build();
 
@@ -78,30 +97,14 @@ app.MapControllers();
 
 app.UseCors(Constants.CORS_POLICY_NAME);
 
-ApplyMigrations(app);
+#region Applying Migrations
+var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<ResearchesUFUContext>();
+
+if (context.Database.GetPendingMigrations().Any()) {
+    context.Database.Migrate();
+}
+#endregion
 
 app.Run();
-
-// applying migrations
-
-// using (var scope = app.Services.CreateScope())
-// {
-//     var services = scope.ServiceProvider;
-//
-//     var context = services.GetRequiredService<ResearchesUFUContext>();
-//     if (context.Database.GetPendingMigrations().Any())
-//     {
-//         context.Database.Migrate();
-//     }
-// }
-
-void ApplyMigrations(WebApplication webApplication)
-{
-    var scope = webApplication.Services.CreateScope();
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ResearchesUFUContext>();
-    
-    if (context.Database.GetPendingMigrations().Any()) {
-        context.Database.Migrate();
-    }
-}

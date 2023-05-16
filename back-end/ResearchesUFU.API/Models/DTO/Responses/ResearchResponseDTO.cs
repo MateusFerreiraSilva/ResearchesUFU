@@ -15,12 +15,11 @@
         public string Thumbnail { get; set; } = string.Empty;
 
         public string ResearchStructure { get; set; } = string.Empty;
+        public List<ResearchFieldResponseDTO>? Fields { get; set; }
 
-        public List<FieldResponseDTO> Fields { get; set; } = new List<FieldResponseDTO>();
+        public List<ResearchTagResponseDto>? Tags { get; set; }
 
-        public List<TagResponseDTO> Tags { get; set; } = new List<TagResponseDTO>();
-
-        public List<AuthorResponseDTO> Authors { get; set; } = new List<AuthorResponseDTO>();
+        public List<ResearchAuthorResponseDto>? Authors { get; set; }
 
         public string LastUpdated { get; set; } = string.Empty;
     }
