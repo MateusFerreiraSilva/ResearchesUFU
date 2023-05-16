@@ -71,8 +71,6 @@ public class ResearchRepository : IBaseRepository<Research>
         _dbContext.Entry(oldResearch).CurrentValues.SetValues(newResearch);
 
         UpdateRelationships(oldResearch, newResearch);
-        
-        // _dbContext.Entry(oldResearch).State = EntityState.Detached;
     }
 
     public void Delete(Research research)

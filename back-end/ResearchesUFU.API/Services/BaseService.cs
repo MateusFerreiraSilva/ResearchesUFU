@@ -1,6 +1,5 @@
 using ResearchesUFU.API.Repositories.Interfaces;
 using ResearchesUFU.API.Utils;
-using System.Reflection;
 
 namespace ResearchesUFU.API.Services;
 

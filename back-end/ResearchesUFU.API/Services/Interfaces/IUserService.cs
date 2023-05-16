@@ -1,5 +1,4 @@
-﻿using ResearchesUFU.API.Models;
-using ResearchesUFU.API.Models.DTO.Requests;
+﻿using ResearchesUFU.API.Models.DTO.Requests;
 using ResearchesUFU.API.Models.DTO.Responses;
 using ResearchesUFU.API.Utils;
 
