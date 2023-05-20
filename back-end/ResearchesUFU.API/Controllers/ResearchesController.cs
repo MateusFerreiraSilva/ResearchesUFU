@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-using ResearchesUFU.API.Models;
 using ResearchesUFU.API.Models.DTO.Requests;
 using ResearchesUFU.API.Models.DTO.Responses;
 using ResearchesUFU.API.Services.Interfaces;
@@ -22,7 +21,7 @@ namespace ResearchesUFU.API.Controllers
         /// <summary>
         /// Get a research by id.
         /// </summary>
-        /// <returns><see cref="Research">Research</see></returns>
+        /// <returns><see cref="ResearchResponseDTO">Research</see></returns>
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -89,7 +88,7 @@ namespace ResearchesUFU.API.Controllers
         /// </summary>
         /// <returns><see cref="ResearchResponseDTO">Research after the update</see></returns>
         [HttpPut("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -99,7 +98,7 @@ namespace ResearchesUFU.API.Controllers
         
             return response.HttpStatusCode switch
             {
-                StatusCodes.Status200OK => Ok(),
+                StatusCodes.Status200OK => Ok(response.Content),
                 StatusCodes.Status404NotFound => NotFound(),
                 StatusCodes.Status500InternalServerError => StatusCode(response.HttpStatusCode),
                 _ => BadRequest(),
@@ -109,7 +108,6 @@ namespace ResearchesUFU.API.Controllers
         /// <summary>
         /// Delete a research of with the given id.
         /// </summary>
-        /// <returns><see cref="ResearchResponseDTO">Status of the deletion</see></returns>
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

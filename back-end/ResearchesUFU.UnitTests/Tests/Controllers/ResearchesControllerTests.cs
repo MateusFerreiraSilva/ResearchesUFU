@@ -1,15 +1,17 @@
+using System.Threading.Tasks;
 using Atc.Test;
 using AutoFixture.Xunit2;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Xunit;
 using NSubstitute;
 using ResearchesUFU.API.Controllers;
 using ResearchesUFU.API.Models.DTO.Responses;
 using ResearchesUFU.API.Services.Interfaces;
 using ResearchesUFU.API.Utils;
+using Xunit;
 
-namespace ResearchesUFU.API.Tests.Controllers;
+namespace ResearchesUFU.UnitTests.Tests.Controllers;
 
 public class ResearchesControllerTests
 {
