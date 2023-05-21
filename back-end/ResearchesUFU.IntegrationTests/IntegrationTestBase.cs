@@ -9,7 +9,7 @@ public class IntegrationTestBase
 
     public IntegrationTestBase()
     {
-        var appFactory = new  WebApplicationFactory<Program>();
+        var appFactory = new WebApplicationFactory<Program>();
         TestClient = appFactory.CreateClient();
     }
 }

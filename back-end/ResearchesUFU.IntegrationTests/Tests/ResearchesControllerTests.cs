@@ -14,31 +14,119 @@ public class ResearchesControllerTests : IntegrationTestBase
     private const string route = "api/Researches/";
     
     [Fact]
+    public async Task Post_NewResearch_Success()
+    {
+        // Act
+        var response = await CreateNewResearchAsync();
+    
+        // Assert
+        response.Should().BeAssignableTo<ResearchResponseDTO>();
+        response.Should().NotBeNull();
+    }
+    
+    [Fact]
     public async Task Get_OneById_Success()
     {
         // Arrange
-        var request = GenerateNewResearchRequest();
+        var newResearch = await CreateNewResearchAsync();
 
         // Act
-        var postResponse = await TestClient.PostAsJsonAsync(route, request); // creating new research for test
-        var postResponseStatus = postResponse.StatusCode;
-        Assert.Equal(HttpStatusCode.OK, postResponseStatus);
-        var postResponseContent = await postResponse.Content.ReadAsAsync<ResearchResponseDTO>();
-
-        var researchId = postResponseContent.Id;
+        var researchId = newResearch.Id;
         
-        var getResponse = await TestClient.GetAsync(route + researchId);
-        var getResponseStatus = getResponse.StatusCode;
-        var getResponseContent = await getResponse.Content.ReadAsAsync<ResearchResponseDTO>();
+        var response = await TestClient.GetAsync(route + researchId);
+        var responseStatus = response.StatusCode;
+        var responseContent = await response.Content.ReadAsAsync<ResearchResponseDTO>();
 
         // Assert
-        getResponseStatus.Should().Be(HttpStatusCode.OK);
-        getResponseContent.Should().BeAssignableTo<ResearchResponseDTO>();
-        getResponseContent.Should().NotBeNull();
-        getResponseContent.Id.Should().Be(researchId);
-        getResponseContent.Title.Should().Be(request.Title);
+        responseStatus.Should().Be(HttpStatusCode.OK);
+        responseContent.Should().BeAssignableTo<ResearchResponseDTO>();
+        responseContent.Should().NotBeNull();
+        responseContent.Should().BeEquivalentTo(newResearch);
     }
+    
+    [Fact]
+    public async Task Put_UpdateOne_Success()
+    {
+        // Arrange
+        var newResearch = await CreateNewResearchAsync();
+        
+        var updatedRequest = new ResearchRequestDTO
+        {
+            Title = "Updated Title",
+            Summary = "Updated Summary",
+            Fields = new List<ResearchFieldRequestDto>
+            {
+                new()
+                {
+                    Field = new FieldRequestDTO
+                    {
+                        Id = 2
+                    }
+                }
+            },
+            Tags = new List<ResearchTagRequestDto>
+            {
+                new()
+                {
+                    Tag = new TagRequestDTO()
+                    {
+                        Id = 1
+                    },
+                },
+                new()
+                {
+                    Tag = new TagRequestDTO()
+                    {
+                        Id = 2
+                    },
+                }
+            },
+            Authors = new List<ResearchAuthorRequestDto>
+            {
+                new()
+                {
+                    Author = new AuthorRequestDTO()
+                    {
+                        Id = 1
+                    }
+                }
+            }
+        };
+    
+        // Act
+        var researchId = newResearch.Id;
 
+        var putResponse = await TestClient.PutAsJsonAsync(route + researchId, updatedRequest);
+        var putResponseStatus = putResponse.StatusCode;
+        var putResponseContent = await putResponse.Content.ReadAsAsync<ResearchResponseDTO>();
+    
+        // Assert
+        putResponseStatus.Should().Be(HttpStatusCode.OK);
+        putResponseContent.Should().BeAssignableTo<ResearchResponseDTO>();
+        putResponseContent.Should().NotBeNull();
+        putResponseContent.Id.Should().Be(researchId);
+        putResponseContent.Title.Should().Be(updatedRequest.Title);
+        putResponseContent.Summary.Should().Be(updatedRequest.Summary);
+        putResponseContent.Fields.Should().BeEquivalentTo(updatedRequest.Fields);
+        putResponseContent.Tags.Should().BeEquivalentTo(updatedRequest.Tags);
+    }
+    
+    [Fact]
+    public async Task Delete_NewResearch_Success()
+    {
+        // Arrange
+        var newResearch = await CreateNewResearchAsync();
+    
+        // Act
+        var researchId = newResearch.Id;
+        
+        var deleteResponse = await TestClient.DeleteAsync(route + researchId);
+        var deleteResponseStatus = deleteResponse.StatusCode;
+    
+        // Assert
+        deleteResponseStatus.Should().Be(HttpStatusCode.OK);
+    }
+    
     [Fact]
     public async Task Get_AllResearches_Success()
     {
@@ -52,87 +140,10 @@ public class ResearchesControllerTests : IntegrationTestBase
         responseContent.Should().BeAssignableTo<List<ResearchResponseDTO>>();
         responseContent.Should().NotBeNullOrEmpty();
     }
-    
-    [Fact]
-    public async Task Post_NewResearch_Success()
+
+    private async Task<ResearchResponseDTO> CreateNewResearchAsync()
     {
-        // Arrange
-        var request = GenerateNewResearchRequest();
-
-        // Act
-        var response = await TestClient.PostAsJsonAsync(route, request);
-        var responseStatus = response.StatusCode;
-        var responseContent = await response.Content.ReadAsAsync<ResearchResponseDTO>();
-
-        // Assert
-        responseStatus.Should().Be(HttpStatusCode.OK);
-        responseContent.Should().BeAssignableTo<ResearchResponseDTO>();
-        responseContent.Should().NotBeNull();
-        responseContent.Title.Should().Be(request.Title);
-    }
-    
-    [Fact]
-    public async Task Put_UpdateOne_Success()
-    {
-        // Arrange
-        var request = GenerateNewResearchRequest();
-
-        // Act
-        var postResponse = await TestClient.PostAsJsonAsync(route, request); // creating new research for test
-        var postResponseStatus = postResponse.StatusCode;
-        Assert.Equal(HttpStatusCode.OK, postResponseStatus);
-        var postResponseContent = await postResponse.Content.ReadAsAsync<ResearchResponseDTO>();
-
-        var researchId = postResponseContent.Id;
-        var updatedRequest = request;
-        updatedRequest.Title = "Updated Title";
-        updatedRequest.Summary = "New Summary";
-        updatedRequest.Tags.Add(new ResearchTagRequestDto
-        {
-            Tag = new TagRequestDTO()
-            {
-                Id = 2
-            }
-        });
-        
-        var putResponse = await TestClient.PutAsJsonAsync(route + researchId, request);
-        var putResponseStatus = putResponse.StatusCode;
-        var putResponseContent = await putResponse.Content.ReadAsAsync<ResearchResponseDTO>();
-
-        // Assert
-        putResponseStatus.Should().Be(HttpStatusCode.OK);
-        putResponseContent.Should().BeAssignableTo<ResearchResponseDTO>();
-        putResponseContent.Should().NotBeNull();
-        putResponseContent.Id.Should().Be(researchId);
-        putResponseContent.Title.Should().Be(updatedRequest.Title);
-        putResponseContent.Summary.Should().Be(updatedRequest.Summary);
-        putResponseContent.Tags.Should().BeEquivalentTo(updatedRequest.Tags);
-    }
-    
-    [Fact]
-    public async Task Delete_NewResearch_Success()
-    {
-        // Arrange
-        var request = GenerateNewResearchRequest();
-
-        // Act
-        var postResponse = await TestClient.PostAsJsonAsync(route, request); // creating new research for test
-        var postResponseStatus = postResponse.StatusCode;
-        Assert.Equal(HttpStatusCode.OK, postResponseStatus);
-        var postResponseContent = await postResponse.Content.ReadAsAsync<ResearchResponseDTO>();
-
-        var researchId = postResponseContent.Id;
-        
-        var deleteResponse = await TestClient.DeleteAsync(route + researchId);
-        var deleteResponseStatus = deleteResponse.StatusCode;
-
-        // Assert
-        deleteResponseStatus.Should().Be(HttpStatusCode.OK);
-    }
-
-    private ResearchRequestDTO GenerateNewResearchRequest()
-    {
-        var research = new ResearchRequestDTO
+        var genericResearch = new ResearchRequestDTO
         {
             Title = "Integration test research",
             Fields = new List<ResearchFieldRequestDto>
@@ -166,7 +177,13 @@ public class ResearchesControllerTests : IntegrationTestBase
                 }
             }
         };
+        
+        var response = await TestClient.PostAsJsonAsync(route, genericResearch);
+        var responseStatus = response.StatusCode;
+        Assert.Equal(HttpStatusCode.OK, responseStatus);
+        var responseContent = await response.Content.ReadAsAsync<ResearchResponseDTO>();
+        Assert.NotNull(responseContent);
 
-        return research;
+        return responseContent;
     }
 }
