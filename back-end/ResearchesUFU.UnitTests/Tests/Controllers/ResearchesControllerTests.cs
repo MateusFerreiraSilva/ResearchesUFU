@@ -23,26 +23,17 @@ public class ResearchesControllerTests
         [Greedy] ResearchesController researchesController
     )
     {
-        #region Arrange
-
+        // Arrange
         var expectedServiceResponse = HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse();
 
         researchService.GetAsync(Arg.Any<int>())
             .ReturnsForAnyArgs(expectedServiceResponse);
-        
-        #endregion
 
-        #region Act
-
+        // Act
         var controllerResponse = await researchesController.Get(RESEARCH_ID);
 
-        #endregion
-
-        #region Assert
-
+        // Assert
         controllerResponse.Should().BeAssignableTo<OkObjectResult>();
-
-        #endregion
     }
     
     [Theory, AutoNSubstituteData]
@@ -50,26 +41,17 @@ public class ResearchesControllerTests
         [Frozen] IResearchService researchService,
         [Greedy] ResearchesController researchesController
     )
-    {
-        #region Arrange
-
+    { 
+        // Arrange
         var expectedServiceResponse = HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
 
         researchService.GetAsync(Arg.Any<int>())
             .Returns(expectedServiceResponse);
-        
-        #endregion
 
-        #region Act
-
+        // Act
         var controllerResponse = await researchesController.Get(RESEARCH_ID);
 
-        #endregion
-
-        #region Assert
-
+        // Assert
         controllerResponse.Should().BeAssignableTo<NotFoundResult>();
-
-        #endregion
     }
 }
