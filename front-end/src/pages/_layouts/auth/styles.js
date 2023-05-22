@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
 
 export const Content = styled.div`
   width: 40%;
-  background-color: #45188e;
+  background-color: #3c56c7;
   border-radius: 8px;
   text-align: center;
 
