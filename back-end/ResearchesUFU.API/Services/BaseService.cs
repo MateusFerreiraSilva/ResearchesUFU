@@ -35,22 +35,7 @@ public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpRespo
             return null;
         }
     }
-    
-    public async Task<List<TEntity>> GetManyAsync(IEnumerable<int> ids)
-    {
-        try
-        {
-            var queries = ids.Select(id => GetOneAsync(id));
-            var queryResults = (await Task.WhenAll(queries)).ToList();
-    
-            return queryResults;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-    
+
     public async Task<IQueryable<TEntity>> GetAllAsync()
     {
         try
