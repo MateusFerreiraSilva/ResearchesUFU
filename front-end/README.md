@@ -33,3 +33,9 @@ $ yarn
 ```bash
 $ yarn start
 ```
+
+
+Rodando com o docker:
+```bash
+$ docker compose up
+```
