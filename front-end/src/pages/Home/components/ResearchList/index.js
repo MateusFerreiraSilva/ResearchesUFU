@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem, Content } from './styles';
@@ -6,27 +5,27 @@ import { List, ListItem, Content } from './styles';
 const ResearchList = ({ items }) => {
   return (
     <List>
-      {items.map((i) => (
-        <ListItem>
+      {items.map((research) => (
+        <ListItem key={research.id}>
           <Content>
             <section>
-              <h1>{i.title}</h1>
-              <p>{i.summary}</p>
+              <h1>{research.title}</h1>
+              <p>{research.summary}</p>
               <span>
-                <b>Temas</b>: {i.fields}
+                <b>Temas</b>: {research.fields.join(', ')}
               </span>
               <span>
-                <b>Tags</b>: {i.tags}
+                <b>Tags</b>: {research.tags.join(', ')}
               </span>
               <span>
-                <b>Autores</b>: {i.authors}
+                <b>Autores</b>: {research.authors.join(', ')}
               </span>
               <span>
-                <b>Status</b>: {i.status}
+                <b>Status</b>: {research.status}
               </span>
             </section>
-            {i.thumbnail && (
-              <img src={i.thumbnail} width="180" height="180" alt="" />
+            {research.thumbnail && (
+              <img src={research.thumbnail} width="180" height="180" alt="" />
             )}
           </Content>
         </ListItem>
@@ -38,5 +37,16 @@ const ResearchList = ({ items }) => {
 export default ResearchList;
 
 ResearchList.propTypes = {
-  items: PropTypes.array.isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      summary: PropTypes.string.isRequired,
+      fields: PropTypes.arrayOf(PropTypes.string).isRequired,
+      tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+      authors: PropTypes.arrayOf(PropTypes.string).isRequired,
+      status: PropTypes.string.isRequired,
+      thumbnail: PropTypes.string,
+    })
+  ).isRequired,
 };
