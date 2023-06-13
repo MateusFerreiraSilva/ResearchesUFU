@@ -18,7 +18,7 @@ const Home = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getResearchesAsync();
+        const data = await getResearchesAsync(); // $filter=contains(title, userInput)
         setResearches(data);
       } catch (error) {
         console.log('Erro ao obter pesquisas:', error);
