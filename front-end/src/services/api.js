@@ -11,9 +11,26 @@ const api = axios.create({
 });
 
 const getResearchesAsync = async () => {
-  const results = await api.get('api/Researches');
-  return results.data.map(r => formatResearch(r));
+  try {
+    const response = await api.get('api/Researches');
+    return response.data.map((research) => formatResearch(research));
+  } catch (error) {
+    console.log('Erro ao obter pesquisas:', error);
+    throw error;
+  }
 };
+
+const getResearchByIdAsync = async (id) => {
+  try {
+    const response = await api.get(`api/Researches/${id}`);
+    const research = response.data;
+    return research;
+  } catch (error) {
+    console.log('Erro ao obter pesquisa por ID:', error);
+    throw error;
+  }
+};
+
 
 const authenticateAsync = async (payload) => await api.post('/api/Session', payload);
 
@@ -22,15 +39,26 @@ const createUserAsync = async (payload) => await api.post('/User', payload);
 const setAuthorizationToken = (token) =>
   (api.defaults.headers.Authorization = `Bearer ${token}`);
 
-const formatResearch = (r) => {
-  r.authors = r.authors.map((a) => a.name).join(", ");
-  r.tags = r.tags.map((t) => t.name).join(", ");
-  r.fields = r.fields.map((f) => f.name).join(", ");
+const formatResearch = (research) => {
+  const formattedResearch = {
+    id: research.id,
+    title: research.title,
+    summary: research.summary,
+    status: research.status,
+    publicationDate: research.publicationDate,
+    thumbnail: research.thumbnail,
+    researchStructure: research.researchStructure,
+    fields: research.fields.map((field) => field.field.name),
+    tags: research.tags.map((tag) => tag.tag.name),
+    authors: research.authors.map((author) => author.author.name),
+    lastUpdated: research.lastUpdated,
+  };
 
-  if (r.summary.length > 330)
-    r.summary = `${r.summary.slice(0, 330).trimEnd()}...`;
+  if (formattedResearch.summary.length > 330) {
+    formattedResearch.summary = `${formattedResearch.summary.slice(0, 330).trimEnd()}...`;
+  }
 
-  return r;
+  return formattedResearch;
 };
 
 export {
@@ -38,4 +66,7 @@ export {
   authenticateAsync,
   createUserAsync,
   setAuthorizationToken,
+  getResearchByIdAsync,
 };
+
+
