@@ -1,6 +1,6 @@
 ﻿namespace ResearchesUFU.API.Models.DTO.Requests
 {
-    public class ResearchRequestDTO
+    public class ResearchRequestDto
     {
         public string Title { get; set; } = string.Empty;
 

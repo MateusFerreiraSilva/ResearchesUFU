@@ -21,9 +21,9 @@ namespace ResearchesUFU.API.Controllers
         /// <summary>
         /// Get a research by id.
         /// </summary>
-        /// <returns><see cref="ResearchResponseDTO">Research</see></returns>
+        /// <returns><see cref="ResearchResponseDto">Research</see></returns>
         [HttpGet("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,7 +46,7 @@ namespace ResearchesUFU.API.Controllers
         /// <returns><see cref="List{ResearchResponseDTO}">Research</see></returns>
         [HttpGet]
         [EnableQuery]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ResearchResponseDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ResearchResponseDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -66,12 +66,12 @@ namespace ResearchesUFU.API.Controllers
         /// <summary>
         /// Register a new research
         /// </summary>
-        /// <returns>The new <see cref="ResearchResponseDTO">research</see></returns>
+        /// <returns>The new <see cref="ResearchResponseDto">research</see></returns>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post([FromBody, Required] ResearchRequestDTO research)
+        public async Task<IActionResult> Post([FromBody, Required] ResearchRequestDto research)
         {
             var response = await _researchService.PostAsync(research);
         
@@ -86,13 +86,13 @@ namespace ResearchesUFU.API.Controllers
         /// <summary>
         /// Update a research of with the given id.
         /// </summary>
-        /// <returns><see cref="ResearchResponseDTO">Research after the update</see></returns>
+        /// <returns><see cref="ResearchResponseDto">Research after the update</see></returns>
         [HttpPut("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResearchResponseDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Put([Required] int id, [FromBody, Required] ResearchRequestDTO research)
+        public async Task<IActionResult> Put([Required] int id, [FromBody, Required] ResearchRequestDto research)
         {
             var response = await _researchService.PutAsync(id, research);
         

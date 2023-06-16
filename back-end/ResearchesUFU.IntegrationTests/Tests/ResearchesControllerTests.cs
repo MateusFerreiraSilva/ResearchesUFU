@@ -20,7 +20,7 @@ public class ResearchesControllerTests : IntegrationTestBase
         var response = await CreateNewResearchAsync();
     
         // Assert
-        response.Should().BeAssignableTo<ResearchResponseDTO>();
+        response.Should().BeAssignableTo<ResearchResponseDto>();
         response.Should().NotBeNull();
     }
     
@@ -35,11 +35,11 @@ public class ResearchesControllerTests : IntegrationTestBase
         
         var response = await TestClient.GetAsync(route + researchId);
         var responseStatus = response.StatusCode;
-        var responseContent = await response.Content.ReadAsAsync<ResearchResponseDTO>();
+        var responseContent = await response.Content.ReadAsAsync<ResearchResponseDto>();
 
         // Assert
         responseStatus.Should().Be(HttpStatusCode.OK);
-        responseContent.Should().BeAssignableTo<ResearchResponseDTO>();
+        responseContent.Should().BeAssignableTo<ResearchResponseDto>();
         responseContent.Should().NotBeNull();
         responseContent.Should().BeEquivalentTo(newResearch);
     }
@@ -50,7 +50,7 @@ public class ResearchesControllerTests : IntegrationTestBase
         // Arrange
         var newResearch = await CreateNewResearchAsync();
         
-        var updatedRequest = new ResearchRequestDTO
+        var updatedRequest = new ResearchRequestDto
         {
             Title = "Updated Title",
             Summary = "Updated Summary",
@@ -58,7 +58,7 @@ public class ResearchesControllerTests : IntegrationTestBase
             {
                 new()
                 {
-                    Field = new FieldRequestDTO
+                    Field = new FieldRequestDto
                     {
                         Id = 2
                     }
@@ -68,14 +68,14 @@ public class ResearchesControllerTests : IntegrationTestBase
             {
                 new()
                 {
-                    Tag = new TagRequestDTO()
+                    Tag = new TagRequestDto()
                     {
                         Id = 1
                     },
                 },
                 new()
                 {
-                    Tag = new TagRequestDTO()
+                    Tag = new TagRequestDto()
                     {
                         Id = 2
                     },
@@ -85,7 +85,7 @@ public class ResearchesControllerTests : IntegrationTestBase
             {
                 new()
                 {
-                    Author = new AuthorRequestDTO()
+                    Author = new AuthorRequestDto()
                     {
                         Id = 1
                     }
@@ -98,11 +98,11 @@ public class ResearchesControllerTests : IntegrationTestBase
 
         var putResponse = await TestClient.PutAsJsonAsync(route + researchId, updatedRequest);
         var putResponseStatus = putResponse.StatusCode;
-        var putResponseContent = await putResponse.Content.ReadAsAsync<ResearchResponseDTO>();
+        var putResponseContent = await putResponse.Content.ReadAsAsync<ResearchResponseDto>();
     
         // Assert
         putResponseStatus.Should().Be(HttpStatusCode.OK);
-        putResponseContent.Should().BeAssignableTo<ResearchResponseDTO>();
+        putResponseContent.Should().BeAssignableTo<ResearchResponseDto>();
         putResponseContent.Should().NotBeNull();
         putResponseContent.Id.Should().Be(researchId);
         putResponseContent.Title.Should().Be(updatedRequest.Title);
@@ -133,24 +133,24 @@ public class ResearchesControllerTests : IntegrationTestBase
         // Act
         var response = await TestClient.GetAsync(route);
         var responseStatus = response.StatusCode;
-        var responseContent = await response.Content.ReadAsAsync<List<ResearchResponseDTO>>();
+        var responseContent = await response.Content.ReadAsAsync<List<ResearchResponseDto>>();
         
         // Assert
         responseStatus.Should().Be(HttpStatusCode.OK);
-        responseContent.Should().BeAssignableTo<List<ResearchResponseDTO>>();
+        responseContent.Should().BeAssignableTo<List<ResearchResponseDto>>();
         responseContent.Should().NotBeNullOrEmpty();
     }
 
-    private async Task<ResearchResponseDTO> CreateNewResearchAsync()
+    private async Task<ResearchResponseDto> CreateNewResearchAsync()
     {
-        var genericResearch = new ResearchRequestDTO
+        var genericResearch = new ResearchRequestDto
         {
             Title = "Integration test research",
             Fields = new List<ResearchFieldRequestDto>
             {
                 new()
                 {
-                    Field = new FieldRequestDTO
+                    Field = new FieldRequestDto
                     {
                         Id = 1
                     }
@@ -160,7 +160,7 @@ public class ResearchesControllerTests : IntegrationTestBase
             {
                 new()
                 {
-                    Tag = new TagRequestDTO()
+                    Tag = new TagRequestDto()
                     {
                         Id = 1
                     }
@@ -170,7 +170,7 @@ public class ResearchesControllerTests : IntegrationTestBase
             {
                 new()
                 {
-                    Author = new AuthorRequestDTO()
+                    Author = new AuthorRequestDto()
                     {
                         Id = 1
                     }
@@ -181,7 +181,7 @@ public class ResearchesControllerTests : IntegrationTestBase
         var response = await TestClient.PostAsJsonAsync(route, genericResearch);
         var responseStatus = response.StatusCode;
         Assert.Equal(HttpStatusCode.OK, responseStatus);
-        var responseContent = await response.Content.ReadAsAsync<ResearchResponseDTO>();
+        var responseContent = await response.Content.ReadAsAsync<ResearchResponseDto>();
         Assert.NotNull(responseContent);
 
         return responseContent;

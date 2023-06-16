@@ -41,10 +41,10 @@ public class ResearchServiceTest
         // Arrange
         var requestId = _fixture.Create<int>();
         var repositoryResponse = _fixture.Create<Research>();
-        var mappedResponse = _fixture.Create<ResearchResponseDTO>();
+        var mappedResponse = _fixture.Create<ResearchResponseDto>();
         
         researchRepository.GetOneAsync(Arg.Any<int>()).ReturnsForAnyArgs(repositoryResponse);
-        mapper.Map<ResearchResponseDTO>(Arg.Any<Research>()).ReturnsForAnyArgs(mappedResponse);
+        mapper.Map<ResearchResponseDto>(Arg.Any<Research>()).ReturnsForAnyArgs(mappedResponse);
 
         // Act
         var response = await sut.GetAsync(requestId);
@@ -54,7 +54,7 @@ public class ResearchServiceTest
         response.Content.Should().Be(mappedResponse);
         
         await researchRepository.Received().GetOneAsync(requestId);
-        mapper.Received().Map<ResearchResponseDTO>(repositoryResponse);
+        mapper.Received().Map<ResearchResponseDto>(repositoryResponse);
     }
     
     [Theory, AutoNSubstituteData]
@@ -109,10 +109,10 @@ public class ResearchServiceTest
     {
         // Arrange
         var repositoryResponse = new List<Research> { _fixture.Create<Research>() }.AsQueryable();
-        var mappedResponse = _fixture.Create<ResearchResponseDTO>();
+        var mappedResponse = _fixture.Create<ResearchResponseDto>();
         
         researchRepository.GetAllAsync().ReturnsForAnyArgs(repositoryResponse);
-        mapper.Map<ResearchResponseDTO>(Arg.Any<Research>()).ReturnsForAnyArgs(mappedResponse);
+        mapper.Map<ResearchResponseDto>(Arg.Any<Research>()).ReturnsForAnyArgs(mappedResponse);
 
         // Act
         var response = await sut.GetAsync();
@@ -120,10 +120,10 @@ public class ResearchServiceTest
         // Assert
         response.HttpStatusCode.Should().Be(StatusCodes.Status200OK);
         response.Content.Should().NotBeNull();
-        response.Content.Should().AllBeAssignableTo<ResearchResponseDTO>();
+        response.Content.Should().AllBeAssignableTo<ResearchResponseDto>();
 
         await researchRepository.Received().GetAllAsync();
-        repositoryResponse.ToList().ForEach(r => mapper.Received().Map<ResearchResponseDTO>(r));
+        repositoryResponse.ToList().ForEach(r => mapper.Received().Map<ResearchResponseDto>(r));
     }
     
     [Theory, AutoNSubstituteData]

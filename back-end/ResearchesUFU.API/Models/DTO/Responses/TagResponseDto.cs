@@ -1,6 +1,6 @@
 ﻿namespace ResearchesUFU.API.Models.DTO.Responses
 {
-    public class TagResponseDTO
+    public class TagResponseDto
     {
         public int Id { get; set; }
 

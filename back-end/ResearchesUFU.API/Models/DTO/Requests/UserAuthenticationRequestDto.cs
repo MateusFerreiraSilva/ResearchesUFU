@@ -1,6 +1,6 @@
 ﻿namespace ResearchesUFU.API.Models.DTO.Requests
 {
-    public class UserAuthenticationRequestDTO
+    public class UserAuthenticationRequestDto
     {
         public string Email { get; set; } = string.Empty;
 

@@ -10,43 +10,43 @@ namespace ResearchesUFU.API
         public MappingProfiles()
         {
             #region response Dtos
-            CreateMap<Research, ResearchResponseDTO>()
+            CreateMap<Research, ResearchResponseDto>()
                 .ForMember(
-                    researchResponseDTO => researchResponseDTO.Fields,
+                    researchResponseDto => researchResponseDto.Fields,
                     research => research.MapFrom(r => r.ResearchField))
                 .ForMember(
-                    researchResponseDTO => researchResponseDTO.Tags,
+                    researchResponseDto => researchResponseDto.Tags,
                     research => research.MapFrom(r => r.ResearchTag))
                 .ForMember(
-                    researchResponseDTO => researchResponseDTO.Authors,
+                    researchResponseDto => researchResponseDto.Authors,
                     research => research.MapFrom(r => r.ResearchAuthor));
             
-            CreateMap<Field, FieldResponseDTO>();
-            CreateMap<Tag, TagResponseDTO>();
-            CreateMap<Author, AuthorResponseDTO>();
+            CreateMap<Field, FieldResponseDto>();
+            CreateMap<Tag, TagResponseDto>();
+            CreateMap<Author, AuthorResponseDto>();
             #endregion
             
             #region Many to Many response Dtos
-            CreateMap<ResearchField, ResearchFieldResponseDTO>();
+            CreateMap<ResearchField, ResearchFieldResponseDto>();
             CreateMap<ResearchTag, ResearchTagResponseDto>();
             CreateMap<ResearchAuthor, ResearchAuthorResponseDto>();
             #endregion
 
             #region request Dtos
-            CreateMap<ResearchRequestDTO, Research>()
+            CreateMap<ResearchRequestDto, Research>()
                 .ForMember(
                     research => research.ResearchField,
-                    researchRequestDTO => researchRequestDTO.MapFrom(r => r.Fields))
+                    researchRequestDto => researchRequestDto.MapFrom(r => r.Fields))
                 .ForMember(
                     research => research.ResearchTag,
-                    researchRequestDTO => researchRequestDTO.MapFrom(r => r.Tags))
+                    researchRequestDto => researchRequestDto.MapFrom(r => r.Tags))
                 .ForMember(
                     research => research.ResearchAuthor,
-                    researchRequestDTO => researchRequestDTO.MapFrom(r => r.Authors));
+                    researchRequestDto => researchRequestDto.MapFrom(r => r.Authors));
             
-            CreateMap<FieldRequestDTO, Field>();
-            CreateMap<TagRequestDTO, Tag>();
-            CreateMap<AuthorRequestDTO, Author>();
+            CreateMap<FieldRequestDto, Field>();
+            CreateMap<TagRequestDto, Tag>();
+            CreateMap<AuthorRequestDto, Author>();
             #endregion
             
             #region Many to Many request Dtos

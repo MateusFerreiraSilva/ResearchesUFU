@@ -6,14 +6,14 @@ namespace ResearchesUFU.API.Services;
 public abstract class BaseService<TEntity> where TEntity : class
 
 {
-    private IBaseRepository<TEntity> _repository;
+    private readonly IBaseRepository<TEntity> _repository;
 
-    public BaseService(IBaseRepository<TEntity> repository)
+    protected BaseService(IBaseRepository<TEntity> repository)
     {
         _repository = repository;
     }
 
-    public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpResponseBase<T>>> method)
+    protected async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpResponseBase<T>>> method)
     {
         try
         {
@@ -24,32 +24,33 @@ public abstract class BaseService<TEntity> where TEntity : class
             return HttpUtils<T>.GenerateHttpErrorResponse();
         }
     }
-    public async Task<TEntity?> GetOneAsync(int id)
+
+    protected async Task<TEntity?> GetOneAsync(int id)
     {
         return await _repository.GetOneAsync(id);
     }
 
-    public async Task<IQueryable<TEntity>?> GetAllAsync()
+    protected async Task<IQueryable<TEntity>?> GetAllAsync()
     {
         return await _repository.GetAllAsync();
     }
 
-    public void Insert(TEntity requestEntity)
+    protected void Insert(TEntity requestEntity)
     {
         _repository.Insert(requestEntity);
     }
-    
-    public void Update(TEntity newEntity, TEntity oldEntity)
+
+    protected void Update(TEntity newEntity, TEntity oldEntity)
     {
         _repository.Update(newEntity, oldEntity);
     }
 
-    public void Delete(TEntity requestEntity)
+    protected void Delete(TEntity requestEntity)
     {   
         _repository.Delete(requestEntity);
     }
 
-    public async Task SaveAsync()
+    protected async Task SaveAsync()
     {
         await _repository.SaveAsync();
     }
