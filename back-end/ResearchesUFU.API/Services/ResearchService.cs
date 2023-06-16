@@ -22,74 +22,69 @@ namespace ResearchesUFU.API.Services
         
         public async Task<HttpResponseBase<ResearchResponseDTO>> GetAsync(int id)
         {
-            var method = async delegate()
+            async Task<HttpResponseBase<ResearchResponseDTO>> Method()
             {
                 var research = await GetOneAsync(id);
 
-                if (research == null)
-                {
-                    return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
-                }
+                return research != null ?
+                    HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(_mapper.Map<ResearchResponseDTO>(research)) :
+                    HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
+            }
 
-                return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(_mapper.Map<ResearchResponseDTO>(research));
-            };
-            
-            var response = await ExecuteMethodAsync(method);
+            var response = await ExecuteMethodAsync(Method);
 
             return response;
         }
 
         public async Task<HttpResponseBase<IQueryable<ResearchResponseDTO>>> GetAsync()
         {
-            var method = async delegate()
+            async Task<HttpResponseBase<IQueryable<ResearchResponseDTO>>> Method()
             {
                 var researches = await GetAllAsync();
-        
-                if (researches == null || researches.Count().Equals(default(int)))
+
+                if (researches == null || researches.Count().Equals(default))
                 {
                     return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpResponse(StatusCodes.Status404NotFound);
                 }
-                
-                return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpSuccessResponse(
-                    researches.Select(r => _mapper.Map<ResearchResponseDTO>(r))
-                );
-            };
-            
-            var response = await ExecuteMethodAsync(method);
+
+                return HttpUtils<IQueryable<ResearchResponseDTO>>.GenerateHttpSuccessResponse(researches.Select(r => _mapper.Map<ResearchResponseDTO>(r)));
+            }
+
+            var response = await ExecuteMethodAsync(Method);
         
             return response;
         }
 
         public async Task<HttpResponseBase<ResearchResponseDTO>> PostAsync(ResearchRequestDTO researchRequest)
         {
-            var method = async delegate()
+            async Task<HttpResponseBase<ResearchResponseDTO>> Method()
             {
                 var research = _mapper.Map<Research>(researchRequest);
 
                 Insert(research);
                 await SaveAsync();
 
-                var responseDTO = _mapper.Map<ResearchResponseDTO>(research);
-        
-                return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDTO);
-            };
-            
-            var response = await ExecuteMethodAsync(method);
+                var responseDto = _mapper.Map<ResearchResponseDTO>(research);
+
+                return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(responseDto);
+            }
+
+            var response = await ExecuteMethodAsync(Method);
         
             return response;
         }
         
         public async Task<HttpResponseBase<ResearchResponseDTO>> PutAsync(int id, ResearchRequestDTO researchRequest)
         {
-            var method = async delegate()
+            async Task<HttpResponseBase<ResearchResponseDTO>> Method()
             {
                 var oldResearch = await GetOneAsync(id);
-                
+
                 if (oldResearch == null)
                 {
                     return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
                 }
-                
+
                 var newResearch = _mapper.Map<Research>(researchRequest);
                 newResearch.Id = oldResearch.Id;
 
@@ -97,16 +92,16 @@ namespace ResearchesUFU.API.Services
                 await SaveAsync();
 
                 return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse(_mapper.Map<ResearchResponseDTO>(newResearch));
-            };
-            
-            var response = await ExecuteMethodAsync(method);
+            }
+
+            var response = await ExecuteMethodAsync(Method);
         
             return response;
         }
         
         public async Task<HttpResponseBase<ResearchResponseDTO>> DeleteAsync(int id)
         {
-            var method = async delegate()
+            async Task<HttpResponseBase<ResearchResponseDTO>> Method()
             {
                 var research = await GetOneAsync(id);
 
@@ -114,14 +109,14 @@ namespace ResearchesUFU.API.Services
                 {
                     return HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
                 }
-                
+
                 Delete(research);
                 await SaveAsync();
 
                 return HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse();
-            };
-            
-            var response = await ExecuteMethodAsync(method);
+            }
+
+            var response = await ExecuteMethodAsync(Method);
         
             return response;
         }

@@ -13,7 +13,7 @@ public abstract class BaseService<TEntity> where TEntity : class
         _repository = repository;
     }
 
-public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpResponseBase<T>>> method)
+    public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpResponseBase<T>>> method)
     {
         try
         {
@@ -24,28 +24,14 @@ public async Task<HttpResponseBase<T>> ExecuteMethodAsync<T>(Func<Task<HttpRespo
             return HttpUtils<T>.GenerateHttpErrorResponse();
         }
     }
-    public async Task<TEntity> GetOneAsync(int id)
+    public async Task<TEntity?> GetOneAsync(int id)
     {
-        try
-        {
-            return await _repository.GetOneAsync(id);
-        }
-        catch
-        {
-            return null;
-        }
+        return await _repository.GetOneAsync(id);
     }
 
-    public async Task<IQueryable<TEntity>> GetAllAsync()
+    public async Task<IQueryable<TEntity>?> GetAllAsync()
     {
-        try
-        {
-            return await _repository.GetAllAsync();
-        }
-        catch
-        {
-            return null;
-        }
+        return await _repository.GetAllAsync();
     }
 
     public void Insert(TEntity requestEntity)
