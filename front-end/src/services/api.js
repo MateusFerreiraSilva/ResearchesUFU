@@ -48,9 +48,9 @@ const formatResearch = (research) => {
     publicationDate: research.publicationDate,
     thumbnail: research.thumbnail,
     researchStructure: research.researchStructure,
-    fields: research.fields.map((field) => field.field.name),
-    tags: research.tags.map((tag) => tag.tag.name),
-    authors: research.authors.map((author) => author.author.name),
+    fields: research.fields.map((field) => field.name),
+    tags: research.tags.map((tag) => tag.name),
+    authors: research.authors.map((author) => author.name),
     lastUpdated: research.lastUpdated,
   };
 
