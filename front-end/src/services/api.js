@@ -10,9 +10,9 @@ const api = axios.create({
   baseURL: settings.api.baseUrl,
 });
 
-const getResearchesAsync = async (query) => {
+const getResearchesAsync = async () => {
   try {
-    const response = await api.get('api/Researches' + query);
+    const response = await api.get('api/Researches');
     return response.data.map((research) => formatResearch(research));
   } catch (error) {
     console.log('Erro ao obter pesquisas:', error);
