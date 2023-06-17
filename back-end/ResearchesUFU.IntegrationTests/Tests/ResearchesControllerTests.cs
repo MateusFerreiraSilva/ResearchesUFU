@@ -7,11 +7,11 @@ using ResearchesUFU.API.Models.DTO.Requests;
 using ResearchesUFU.API.Models.DTO.Responses;
 using Xunit;
 
-namespace ResearchesUFU.IntegrationTests;
+namespace ResearchesUFU.IntegrationTests.Tests;
 
 public class ResearchesControllerTests : IntegrationTestBase
 {
-    private const string route = "api/Researches/";
+    private const string Route = "api/Researches/";
     
     [Fact]
     public async Task Post_NewResearch_Success()
@@ -33,7 +33,7 @@ public class ResearchesControllerTests : IntegrationTestBase
         // Act
         var researchId = newResearch.Id;
         
-        var response = await TestClient.GetAsync(route + researchId);
+        var response = await TestClient.GetAsync(Route + researchId);
         var responseStatus = response.StatusCode;
         var responseContent = await response.Content.ReadAsAsync<ResearchResponseDto>();
 
@@ -96,7 +96,7 @@ public class ResearchesControllerTests : IntegrationTestBase
         // Act
         var researchId = newResearch.Id;
 
-        var putResponse = await TestClient.PutAsJsonAsync(route + researchId, updatedRequest);
+        var putResponse = await TestClient.PutAsJsonAsync(Route + researchId, updatedRequest);
         var putResponseStatus = putResponse.StatusCode;
         var putResponseContent = await putResponse.Content.ReadAsAsync<ResearchResponseDto>();
     
@@ -120,7 +120,7 @@ public class ResearchesControllerTests : IntegrationTestBase
         // Act
         var researchId = newResearch.Id;
         
-        var deleteResponse = await TestClient.DeleteAsync(route + researchId);
+        var deleteResponse = await TestClient.DeleteAsync(Route + researchId);
         var deleteResponseStatus = deleteResponse.StatusCode;
     
         // Assert
@@ -131,7 +131,7 @@ public class ResearchesControllerTests : IntegrationTestBase
     public async Task Get_AllResearches_Success()
     {
         // Act
-        var response = await TestClient.GetAsync(route);
+        var response = await TestClient.GetAsync(Route);
         var responseStatus = response.StatusCode;
         var responseContent = await response.Content.ReadAsAsync<List<ResearchResponseDto>>();
         
@@ -178,7 +178,7 @@ public class ResearchesControllerTests : IntegrationTestBase
             }
         };
         
-        var response = await TestClient.PostAsJsonAsync(route, genericResearch);
+        var response = await TestClient.PostAsJsonAsync(Route, genericResearch);
         var responseStatus = response.StatusCode;
         Assert.Equal(HttpStatusCode.OK, responseStatus);
         var responseContent = await response.Content.ReadAsAsync<ResearchResponseDto>();
