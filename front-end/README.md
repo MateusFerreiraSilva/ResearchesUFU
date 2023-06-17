@@ -1,4 +1,4 @@
-#Tecnlogias e Dependências 
+
 
 - Tecnologia: React;
 - Dependências 
@@ -33,9 +33,8 @@ $ yarn
 ```bash
 $ yarn start
 ```
-
-
-Rodando com o docker:
-```bash
+## Executando (Docker)
+Para executar o projeto com docker basta executar o seguinte comando:
+ ```bash
 $ docker compose up
 ```

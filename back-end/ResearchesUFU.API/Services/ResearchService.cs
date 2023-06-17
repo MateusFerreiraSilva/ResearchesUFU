@@ -42,7 +42,7 @@ namespace ResearchesUFU.API.Services
             {
                 var researches = await GetAllAsync();
 
-                if (researches == null || researches.Count().Equals(default))
+                if (researches == null || !researches.Any())
                 {
                     return HttpUtils<IQueryable<ResearchResponseDto>>.GenerateHttpResponse(StatusCodes.Status404NotFound);
                 }

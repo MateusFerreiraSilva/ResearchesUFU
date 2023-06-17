@@ -1,4 +1,5 @@
-﻿## Recomendações
+
+##  Recomendações
 - Sistema operacional:
     - Windows 10 ou Windows 11 (Recomendado)
     - Linux (Ubuntu 20.04) ou superior
@@ -32,3 +33,9 @@ Os endereços por onde a aplicação está sendo executa serão apresentadas no 
     
 Para visualizar o swagger da aplicação, basta adicionar /swagger ao final do endereço, ex:
 - https://localhost:7158/swagger
+## Executando (Docker)
+Para executar o projeto com docker basta executar o seguinte comando dentro da pasta ResearchesUFU.API:
+ ```bash
+$ docker compose up
+```
+
