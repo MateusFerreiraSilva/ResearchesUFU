@@ -10,9 +10,9 @@ const api = axios.create({
   baseURL: settings.api.baseUrl,
 });
 
-const getResearchesAsync = async () => {
+const getResearchesAsync = async (query) => {
   try {
-    const response = await api.get('api/Researches');
+    const response = await api.get('api/Researches' + query);
     return response.data.map((research) => formatResearch(research));
   } catch (error) {
     console.log('Erro ao obter pesquisas:', error);
@@ -48,9 +48,9 @@ const formatResearch = (research) => {
     publicationDate: research.publicationDate,
     thumbnail: research.thumbnail,
     researchStructure: research.researchStructure,
-    fields: research.fields.map((field) => field.field.name),
-    tags: research.tags.map((tag) => tag.tag.name),
-    authors: research.authors.map((author) => author.author.name),
+    fields: research.fields.map((field) => field.name),
+    tags: research.tags.map((tag) => tag.name),
+    authors: research.authors.map((author) => author.name),
     lastUpdated: research.lastUpdated,
   };
 

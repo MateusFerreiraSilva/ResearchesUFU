@@ -60,19 +60,19 @@ const ResearchPage = () => {
       <h2>Fields:</h2>
       <List>
         {fields.map((field) => (
-          <ListItem key={field.field.id}>{field.field.name}</ListItem>
+          <ListItem key={field.id}>{field.name}</ListItem>
         ))}
       </List>
       <h2>Tags:</h2>
       <TagsList>
         {tags.map((tag) => (
-          <Tag key={tag.tag.id}>{tag.tag.name}</Tag>
+          <Tag key={tag.id}>{tag.name}</Tag>
         ))}
       </TagsList>
       <h2>Authors:</h2>
       <AuthorsList>
         {authors.map((author) => (
-          <Author key={author.author.id}>{author.author.name}</Author>
+          <Author key={author.id}>{author.name}</Author>
         ))}
       </AuthorsList>
       <LastUpdated>Last Updated: {lastUpdated}</LastUpdated>
