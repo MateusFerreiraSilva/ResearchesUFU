@@ -15,19 +15,17 @@ namespace ResearchesUFU.API.Services
 
         public async Task<HttpResponseBase<UserAuthenticationResponseDto>> AuthenticateUserAsync(UserAuthenticationRequestDto userAuthenticationRequest)
         {
-            var method = async delegate()
+            async Task<HttpResponseBase<UserAuthenticationResponseDto>> Method()
             {
                 var email = userAuthenticationRequest.Email;
                 var passwordHash = userAuthenticationRequest.PasswordHash;
 
-                if (!ValidationsUtils.isValidEmail(email) ||
-                    !ValidationsUtils.isValidPasswordHash(passwordHash)
-                   )
+                if (!ValidationsUtils.IsValidEmail(email) || !ValidationsUtils.IsValidPasswordHash(passwordHash))
                 {
                     return HttpUtils<UserAuthenticationResponseDto>.GenerateHttpBadRequestResponse();
                 }
 
-                var user = (await GetAllAsync()).FirstOrDefault(u => u.Email.Equals(email));
+                var user = (await GetAllAsync())?.FirstOrDefault(u => u.Email.Equals(email));
 
                 if (user == null)
                 {
@@ -38,22 +36,17 @@ namespace ResearchesUFU.API.Services
                 {
                     var successResponse = new UserAuthenticationResponseDto
                     {
-                        UserId = user.Id,
-                        Token = Guid.NewGuid().ToString() // random GUID :)
+                        UserId = user.Id, Token = Guid.NewGuid().ToString() // random GUID :)
                     };
                     return HttpUtils<UserAuthenticationResponseDto>.GenerateHttpSuccessResponse(successResponse);
                 }
 
-                var failureResponse = new UserAuthenticationResponseDto
-                {
-                    UserId = 0,
-                    Token = string.Empty
-                };
+                var failureResponse = new UserAuthenticationResponseDto { UserId = default, Token = string.Empty };
 
                 return HttpUtils<UserAuthenticationResponseDto>.GenerateHttpBadRequestResponse(failureResponse);
-            };
+            }
 
-            var response = await ExecuteMethodAsync(method);
+            var response = await ExecuteMethodAsync(Method);
 
             return response;
         }
