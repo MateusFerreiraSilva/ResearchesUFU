@@ -24,7 +24,7 @@ public class ResearchesControllerTests
     )
     {
         // Arrange
-        var expectedServiceResponse = HttpUtils<ResearchResponseDTO>.GenerateHttpSuccessResponse();
+        var expectedServiceResponse = HttpUtils<ResearchResponseDto>.GenerateHttpSuccessResponse();
 
         researchService.GetAsync(Arg.Any<int>())
             .ReturnsForAnyArgs(expectedServiceResponse);
@@ -43,7 +43,7 @@ public class ResearchesControllerTests
     )
     { 
         // Arrange
-        var expectedServiceResponse = HttpUtils<ResearchResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
+        var expectedServiceResponse = HttpUtils<ResearchResponseDto>.GenerateHttpResponse(StatusCodes.Status404NotFound);
 
         researchService.GetAsync(Arg.Any<int>())
             .Returns(expectedServiceResponse);

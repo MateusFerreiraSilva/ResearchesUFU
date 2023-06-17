@@ -4,29 +4,24 @@ namespace ResearchesUFU.API.Utils
 {
     public static class ValidationsUtils
     {
-        const string EMAIL_PATTERN_REGEX = @"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
-        const int SHA256_STRING_LENGTH = 64;
+        private const string EmailPatternRegex = @"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
+        private const int Sha256StringLength = 64;
 
-        public static bool isValidEmail(string email)
+        public static bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
                 return false;
             }
 
-            var match = Regex.Match(email, EMAIL_PATTERN_REGEX);
+            var match = Regex.Match(email, EmailPatternRegex);
 
             return match.Success;
         }
 
-        public static bool isValidPasswordHash(string passwordHash)
+        public static bool IsValidPasswordHash(string passwordHash)
         {
-            if (string.IsNullOrWhiteSpace(passwordHash))
-            {
-                return false;
-            }
-
-            return passwordHash.Length.Equals(SHA256_STRING_LENGTH);
+            return !string.IsNullOrWhiteSpace(passwordHash) && passwordHash.Length.Equals(Sha256StringLength);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ResearchesUFU.API.Models.DTO.Requests
 {
-    public class AuthorRequestDTO
+    public class FieldRequestDto
     {
         public int Id { get; set; }
     }

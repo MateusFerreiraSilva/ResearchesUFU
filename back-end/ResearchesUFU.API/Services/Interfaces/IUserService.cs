@@ -6,6 +6,6 @@ namespace ResearchesUFU.API.Services.Interfaces
 {
     public interface IUserService
     {
-        public Task<HttpResponseBase<UserAuthenticationResponseDTO>> AuthenticateUserAsync(UserAuthenticationRequestDTO userAuthenticationRequest);
+        public Task<HttpResponseBase<UserAuthenticationResponseDto>> AuthenticateUserAsync(UserAuthenticationRequestDto userAuthenticationRequest);
     }
 }

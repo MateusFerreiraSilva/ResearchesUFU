@@ -1,6 +1,6 @@
 ﻿namespace ResearchesUFU.API.Models.DTO.Responses
 {
-    public class ResearchResponseDTO
+    public class ResearchResponseDto
     {
         public int Id { get; set; }
 
@@ -15,7 +15,7 @@
         public string Thumbnail { get; set; } = string.Empty;
 
         public string ResearchStructure { get; set; } = string.Empty;
-        public List<ResearchFieldResponseDTO>? Fields { get; set; }
+        public List<ResearchFieldResponseDto>? Fields { get; set; }
 
         public List<ResearchTagResponseDto>? Tags { get; set; }
 

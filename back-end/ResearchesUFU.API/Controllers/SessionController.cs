@@ -20,12 +20,12 @@ namespace ResearchesUFU.API.Controllers
         /// <summary>
         /// performs the login process
         /// </summary>
-        /// <returns>The <see cref="UserAuthenticationResponseDTO">info about the authenticate user</see></returns>
+        /// <returns>The <see cref="UserAuthenticationResponseDto">info about the authenticate user</see></returns>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserAuthenticationResponseDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserAuthenticationResponseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Login([FromBody, Required] UserAuthenticationRequestDTO userAuthenticationRequest)
+        public async Task<IActionResult> Login([FromBody, Required] UserAuthenticationRequestDto userAuthenticationRequest)
         {
             var response = await _userService.AuthenticateUserAsync(userAuthenticationRequest);
 

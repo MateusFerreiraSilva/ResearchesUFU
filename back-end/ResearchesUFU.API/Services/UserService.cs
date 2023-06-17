@@ -13,47 +13,40 @@ namespace ResearchesUFU.API.Services
         {
         }
 
-        public async Task<HttpResponseBase<UserAuthenticationResponseDTO>> AuthenticateUserAsync(UserAuthenticationRequestDTO userAuthenticationRequest)
+        public async Task<HttpResponseBase<UserAuthenticationResponseDto>> AuthenticateUserAsync(UserAuthenticationRequestDto userAuthenticationRequest)
         {
-            var method = async delegate()
+            async Task<HttpResponseBase<UserAuthenticationResponseDto>> Method()
             {
                 var email = userAuthenticationRequest.Email;
                 var passwordHash = userAuthenticationRequest.PasswordHash;
 
-                if (!ValidationsUtils.isValidEmail(email) ||
-                    !ValidationsUtils.isValidPasswordHash(passwordHash)
-                   )
+                if (!ValidationsUtils.IsValidEmail(email) || !ValidationsUtils.IsValidPasswordHash(passwordHash))
                 {
-                    return HttpUtils<UserAuthenticationResponseDTO>.GenerateHttpBadRequestResponse();
+                    return HttpUtils<UserAuthenticationResponseDto>.GenerateHttpBadRequestResponse();
                 }
 
-                var user = (await GetAllAsync()).FirstOrDefault(u => u.Email.Equals(email));
+                var user = (await GetAllAsync())?.FirstOrDefault(u => u.Email.Equals(email));
 
                 if (user == null)
                 {
-                    return HttpUtils<UserAuthenticationResponseDTO>.GenerateHttpResponse(StatusCodes.Status404NotFound);
+                    return HttpUtils<UserAuthenticationResponseDto>.GenerateHttpResponse(StatusCodes.Status404NotFound);
                 }
 
                 if (user.PasswordHash.Equals(passwordHash))
                 {
-                    var successResponse = new UserAuthenticationResponseDTO
+                    var successResponse = new UserAuthenticationResponseDto
                     {
-                        UserId = user.Id,
-                        Token = Guid.NewGuid().ToString() // random GUID :)
+                        UserId = user.Id, Token = Guid.NewGuid().ToString() // random GUID :)
                     };
-                    return HttpUtils<UserAuthenticationResponseDTO>.GenerateHttpSuccessResponse(successResponse);
+                    return HttpUtils<UserAuthenticationResponseDto>.GenerateHttpSuccessResponse(successResponse);
                 }
 
-                var failureResponse = new UserAuthenticationResponseDTO
-                {
-                    UserId = 0,
-                    Token = string.Empty
-                };
+                var failureResponse = new UserAuthenticationResponseDto { UserId = default, Token = string.Empty };
 
-                return HttpUtils<UserAuthenticationResponseDTO>.GenerateHttpBadRequestResponse(failureResponse);
-            };
+                return HttpUtils<UserAuthenticationResponseDto>.GenerateHttpBadRequestResponse(failureResponse);
+            }
 
-            var response = await ExecuteMethodAsync(method);
+            var response = await ExecuteMethodAsync(Method);
 
             return response;
         }

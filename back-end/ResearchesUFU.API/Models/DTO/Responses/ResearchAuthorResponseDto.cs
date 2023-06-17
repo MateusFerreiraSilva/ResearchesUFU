@@ -2,5 +2,5 @@ namespace ResearchesUFU.API.Models.DTO.Responses;
 
 public class ResearchAuthorResponseDto
 {
-    public AuthorResponseDTO Author { get; set; }
+    public AuthorResponseDto Author { get; set; }
 }
