@@ -76,4 +76,4 @@ _[Ss]cripts
 *.dot[Cc]over
 run_postgres.txt
 .idea/*
-/front-end/src/config/appsettings.json
+front-end/src/config/appsettings.json
